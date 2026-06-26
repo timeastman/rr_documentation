@@ -2,3 +2,5 @@
   href: index.md
 - name: Zero Count Tracking
   href: zero-count-tracking.md
+- name: API Documentation
+  href: api/
