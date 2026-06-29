@@ -85,6 +85,11 @@ flowchart TD
     D -->|Override needed| F[Change Delivery Type on Order]
     F --> E
     E --> G[Posted Shipment / Invoice / Credit Memo carries Delivery Type]
+
+    subgraph Legend
+        direction LR
+        L1[Action / Step] ~~~ L2{Decision Point}
+    end
 ```
 
 ### Customer–Contact synchronisation
@@ -98,6 +103,7 @@ sequenceDiagram
     BC->>Contact: Sync Delivery Type to linked Company Contact
     BC->>Contact: Sync Delivery Type to linked Person Contacts
     Note over Contact: All related contacts now show the updated delivery type
+    Note over User,Contact: Legend: Solid arrow = user action | Dashed arrow = system response
 ```
 
 ---
