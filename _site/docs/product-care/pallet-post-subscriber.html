@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Pallet Post Subscriber | Reboot Revolution Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Pallet Post Subscriber | Reboot Revolution Documentation ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/timeastman/rr_documentation/blob/styling/docs/product-care/pallet-post-subscriber.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Reboot Revolution Documentation">
+            Reboot Revolution Documentation
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="pallet-post-subscriber">
+<h1 id="pallet-post-subscriber">Pallet Post Subscriber</h1>
+
+<p>The <strong>Pallet Post Subscriber</strong> (Codeunit 50105) is a manual event subscriber that carries pallet tracking data through the warehouse shipment posting process. It ensures that pallet numbers and package tracking numbers flow from warehouse shipment lines to posted warehouse shipment lines and onward to sales shipment lines.</p>
+<h2 id="purpose">Purpose</h2>
+<p>When a warehouse shipment line belongs to multiple pallets, the standard posting process cannot determine which pallet applies. This codeunit solves that by binding a scoped subscriber instance — tied to a specific pallet number — around each posting call, so the correct Pallet Shipment Entry is matched.</p>
+<h2 id="how-it-works">How It Works</h2>
+<ol>
+<li>A caller creates an instance of this codeunit and calls <code>SetPalletNo</code> with the target pallet number.</li>
+<li>The instance is bound as a manual event subscriber before the posting call begins.</li>
+<li>During posting, the subscriber fires and looks up the <strong>Pallet Shipment Entry</strong> matching the current pallet number and warehouse shipment line.</li>
+<li>It copies <code>Pallet No.</code> and <code>Package Tracking No.</code> to the posted warehouse shipment line.</li>
+<li>A second subscriber then copies those same fields from the posted warehouse shipment line to the sales shipment line.</li>
+</ol>
+<h2 id="event-subscriptions">Event Subscriptions</h2>
+<table>
+<thead>
+<tr>
+<th>Event Publisher</th>
+<th>Event Name</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Codeunit &quot;Whse.-Post Shipment&quot;</td>
+<td><code>OnCreatePostedShptLineOnBeforePostedWhseShptLineInsert</code></td>
+<td>Copies Pallet No. and Package Tracking No. from Pallet Shipment Entry to the Posted Whse. Shipment Line.</td>
+</tr>
+<tr>
+<td>Codeunit &quot;Sales-Post&quot;</td>
+<td><code>OnBeforeSalesShptLineInsert</code></td>
+<td>Copies Pallet No. and Package Tracking No. from Posted Whse. Shipment Line to the Sales Shipment Line.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="fields-transferred">Fields Transferred</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Source</th>
+<th>Destination</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pallet No.</td>
+<td>Pallet Shipment Entry</td>
+<td>Posted Whse. Shipment Line → Sales Shipment Line</td>
+</tr>
+<tr>
+<td>Package Tracking No.</td>
+<td>Pallet Shipment Entry</td>
+<td>Posted Whse. Shipment Line → Sales Shipment Line</td>
+</tr>
+</tbody>
+</table>
+<h2 id="usage-pattern">Usage Pattern</h2>
+<pre><code class="lang-al">var
+    PalletPostSubscriber: Codeunit &quot;Pallet Post Subscriber TMA1AA&quot;;
+begin
+    PalletPostSubscriber.SetPalletNo('PAL-001');
+    BindSubscription(PalletPostSubscriber);
+
+    // Perform warehouse shipment posting here
+
+    UnbindSubscription(PalletPostSubscriber);
+end;
+</code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Always call <code>SetPalletNo</code> before <code>BindSubscription</code>. The subscriber uses the stored pallet number to filter Pallet Shipment Entries, so binding without setting it first will result in no match.</p>
+</div>
+<h2 id="design-notes">Design Notes</h2>
+<ul>
+<li>The codeunit uses <code>EventSubscriberInstance = Manual</code>, meaning it only fires when explicitly bound by calling code.</li>
+<li>This pattern allows multiple pallets on the same warehouse shipment to be posted correctly by binding a separate instance for each pallet's posting call.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/timeastman/rr_documentation/blob/styling/docs/product-care/pallet-post-subscriber.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

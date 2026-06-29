@@ -1,0 +1,4216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>PCG API — Integration Guide | Reboot Revolution Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="PCG API — Integration Guide | Reboot Revolution Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/timeastman/rr_documentation/blob/styling/docs/product-care/api/pcg-api-integration-guide.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="Reboot Revolution Documentation">
+            Reboot Revolution Documentation
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="pcg-api-integration-guide">
+<h1 id="pcg-api--integration-guide">PCG API — Integration Guide</h1>
+
+<p><strong>App</strong>: PCG API<br>
+<strong>Publisher</strong>: Technology Management<br>
+<strong>Version</strong>: 27.3.x<br>
+<strong>BC Platform</strong>: 27.3 (Cloud, Runtime 16.0)<br>
+<strong>Description</strong>: A collection of API endpoints for reading and writing data in Business Central as part of the PCG integration.</p>
+<hr>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#api-endpoint-reference">API Endpoint Reference</a></li>
+<li><a href="#functional-areas">Functional Areas</a>
+<ul>
+<li><a href="#common--setup">Common / Setup</a></li>
+<li><a href="#p5--order-cancellation">P5 — Order Cancellation</a></li>
+<li><a href="#p6--sales-order-line-dispatch">P6 — Sales Order Line Dispatch</a></li>
+<li><a href="#p7--palletised-load-build">P7 — Palletised Load Build</a></li>
+<li><a href="#p8--freight-shipping-info">P8 — Freight Shipping Info</a></li>
+<li><a href="#p9--rtb-returns">P9 — RTB Returns</a></li>
+<li><a href="#p10--purchase-order">P10 — Purchase Order</a></li>
+<li><a href="#sales-return-orders">Sales Return Orders</a></li>
+</ul>
+</li>
+<li><a href="#service-enabled-procedures">Service-Enabled Procedures</a></li>
+<li><a href="#caller-workflows">Caller Workflows</a>
+<ul>
+<li><a href="#p7--palletised-load-build">P7 — Palletised Load Build</a></li>
+<li><a href="#p8--freight-shipping-info">P8 — Freight Shipping Info</a></li>
+<li><a href="#sales-return-orders--patch">Sales Return Orders — PATCH</a></li>
+</ul>
+</li>
+<li><a href="#outbound-json-payloads">Outbound JSON Payloads</a></li>
+<li><a href="#data-model">Data Model</a>
+<ul>
+<li><a href="#custom-tables">Custom Tables</a></li>
+<li><a href="#table-extensions">Table Extensions</a></li>
+</ul>
+</li>
+<li><a href="#internal-components">Internal Components</a></li>
+<li><a href="#permission-set">Permission Set</a></li>
+<li><a href="#dependencies">Dependencies</a></li>
+</ol>
+<hr>
+<h2 id="api-endpoint-reference">API Endpoint Reference</h2>
+<p>All endpoints are OData v4 and follow the pattern:</p>
+<pre><code>/api/{publisher}/{group}/{version}/{entitySetName}
+</code></pre>
+<p>Base: <code>/api/technologyManagement/integrations/v2.0/</code></p>
+<table>
+<thead>
+<tr>
+<th>Page #</th>
+<th>Entity Set Name</th>
+<th>Entity Name</th>
+<th>HTTP Methods</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50048</td>
+<td><code>items</code></td>
+<td><code>item</code></td>
+<td>GET, PATCH</td>
+<td>OData key: <code>SystemId</code></td>
+</tr>
+<tr>
+<td>50049</td>
+<td><code>itemInventory</code></td>
+<td><code>itemInventory</code></td>
+<td>GET</td>
+<td>Read-only; <code>locationFilter</code> is a FlowFilter — pass as <code>$filter=locationFilter eq 'MAIN'</code>; not stored, not returned in responses</td>
+</tr>
+<tr>
+<td>50050</td>
+<td><code>itemReferences</code></td>
+<td><code>itemReference</code></td>
+<td>GET, POST, PATCH</td>
+<td>POST will reject duplicates — use PATCH to update existing records. PATCH will rename the record if any key field is changed (<code>itemNo</code>, <code>variantCode</code>, <code>unitOfMeasure</code>, <code>referenceType</code>, <code>referenceTypeNo</code>, <code>referenceNo</code>)</td>
+</tr>
+<tr>
+<td>50085</td>
+<td><code>itemUnitOfMeasure</code></td>
+<td><code>itemUnitOfMeasure</code></td>
+<td>GET, POST, PATCH</td>
+<td></td>
+</tr>
+<tr>
+<td>50051</td>
+<td><code>salesOrders</code></td>
+<td><code>salesOrder</code></td>
+<td>GET, PATCH</td>
+<td>Includes <code>salesLines</code> sub-page</td>
+</tr>
+<tr>
+<td>50052</td>
+<td><code>salesLines</code></td>
+<td><code>salesLine</code></td>
+<td>GET, POST, PATCH</td>
+<td>Sub-page of <code>salesOrders</code></td>
+</tr>
+<tr>
+<td>50162</td>
+<td><code>salesOrderCancellations</code></td>
+<td><code>salesOrderCancellation</code></td>
+<td>POST</td>
+<td>Insert-only; includes <code>salesOrderCancellationLines</code> sub-page</td>
+</tr>
+<tr>
+<td>50165</td>
+<td><code>salesOrderCancellationLines</code></td>
+<td><code>salesOrderCancellationLine</code></td>
+<td>POST</td>
+<td>Sub-page of <code>salesOrderCancellations</code></td>
+</tr>
+<tr>
+<td>50087</td>
+<td><code>purchaseOrders</code></td>
+<td><code>purchaseOrder</code></td>
+<td>GET</td>
+<td>Read-only; includes <code>purchaseOrderLines</code> sub-page</td>
+</tr>
+<tr>
+<td>50181</td>
+<td><code>purchaseOrderLines</code></td>
+<td><code>purchaseOrderLine</code></td>
+<td>GET</td>
+<td>Read-only; sub-page of <code>purchaseOrders</code></td>
+</tr>
+<tr>
+<td>50229</td>
+<td><code>purchaseOrderCancellations</code></td>
+<td><code>purchaseOrderCancellation</code></td>
+<td>POST</td>
+<td>Insert-only; includes <code>purchaseOrderCancellationLines</code> sub-page</td>
+</tr>
+<tr>
+<td>50230</td>
+<td><code>purchaseOrderCancellationLines</code></td>
+<td><code>purchaseOrderCancellationLine</code></td>
+<td>POST</td>
+<td>Sub-page of <code>purchaseOrderCancellations</code></td>
+</tr>
+<tr>
+<td>50164</td>
+<td><code>pcgPalletisedLoadBuilds</code></td>
+<td><code>pcgPalletisedLoadBuild</code></td>
+<td>POST, PATCH</td>
+<td>Includes <code>pcgPalletisedLoadLines</code> sub-page</td>
+</tr>
+<tr>
+<td>50163</td>
+<td><code>pcgPalletisedLoadLines</code></td>
+<td><code>pcgPalletisedLoadLine</code></td>
+<td>GET, POST, PATCH</td>
+<td>Sub-page of <code>pcgPalletisedLoadBuilds</code></td>
+</tr>
+<tr>
+<td>50231</td>
+<td><code>salesReturnOrders</code></td>
+<td><code>salesReturnOrder</code></td>
+<td>GET, POST, PATCH, DELETE</td>
+<td>Full Sales Return Order; includes <code>salesReturnLines</code> sub-page</td>
+</tr>
+<tr>
+<td>50232</td>
+<td><code>salesReturnLines</code></td>
+<td><code>salesReturnLine</code></td>
+<td>GET, POST, PATCH</td>
+<td>Sub-page of <code>salesReturnOrders</code></td>
+</tr>
+<tr>
+<td>50233</td>
+<td><code>salesReturnOrdersExt</code></td>
+<td><code>salesReturnOrderExt</code></td>
+<td>GET, POST, PATCH</td>
+<td>Slim variant — custom fields only; includes <code>salesReturnLinesExt</code> sub-page</td>
+</tr>
+<tr>
+<td>50234</td>
+<td><code>salesReturnLinesExt</code></td>
+<td><code>salesReturnLineExt</code></td>
+<td>GET, POST, PATCH</td>
+<td>Sub-page of <code>salesReturnOrdersExt</code></td>
+</tr>
+<tr>
+<td>50167</td>
+<td><code>warehouseReceiptFreight</code></td>
+<td><code>warehouseReceiptFreight</code></td>
+<td>GET, PATCH</td>
+<td>Includes <code>warehouseReceiptFreightLines</code> sub-page</td>
+</tr>
+<tr>
+<td>50169</td>
+<td><code>warehouseReceiptFreightLines</code></td>
+<td><code>warehouseReceiptFreightLine</code></td>
+<td>GET</td>
+<td>Sub-page of <code>warehouseReceiptFreight</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="field-reference-by-endpoint">Field Reference by Endpoint</h3>
+<h4 id="items-pag50048"><code>items</code> (PAG50048)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>Item No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>number2</code></td>
+<td>Item No. 2</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>displayName</code></td>
+<td>Description</td>
+<td>Text[100]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>subCategory</code></td>
+<td>Sub Category</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>warrantyCategory</code></td>
+<td>Warranty Category</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>supplyType</code></td>
+<td>Supply Type</td>
+<td>Option</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>customerProductCode</code></td>
+<td>Customer Product Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>storageWarehouse</code></td>
+<td>Storage Warehouse</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>boxType</code></td>
+<td>Box Type</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>productHeight</code></td>
+<td>Product Height</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>productWidth</code></td>
+<td>Product Width</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>productDepth</code></td>
+<td>Product Depth</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>outerCartonUnits</code></td>
+<td>Number of Units per Outer Carton</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>container20Qty</code></td>
+<td>20ft Container Qty.</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>container40Qty</code></td>
+<td>40ft Container Qty.</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>container40HQQty</code></td>
+<td>40ft HQ Container Qty.</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>container45Qty</code></td>
+<td>45ft Container Qty.</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>bundle</code></td>
+<td>Bundle</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>holdQuarantineQty</code></td>
+<td>Hold / Quarantine Qty.</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>nextPOQuantity</code></td>
+<td>Next PO Quantity</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>nextPODate</code></td>
+<td>Next PO Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>vendorNo</code></td>
+<td>Vendor No.</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>vendorItemNo</code></td>
+<td>Vendor Item No.</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>leadTimeCalculation</code></td>
+<td>Lead Time Calculation</td>
+<td>Duration</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>reorderQuantity</code></td>
+<td>Reorder Quantity</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>grossWeight</code></td>
+<td>Gross Weight</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>netWeight</code></td>
+<td>Net Weight</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>tariffNo</code></td>
+<td>Tariff No.</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>countryRegionPurchasedCode</code></td>
+<td>Country/Region Purchased Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>vatProdPostingGroup</code></td>
+<td>VAT Prod. Posting Group</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>minimumOrderQuantity</code></td>
+<td>Minimum Order Quantity</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>maximumOrderQuantity</code></td>
+<td>Maximum Order Quantity</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>dutyDue</code></td>
+<td>Duty Due %</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>unitVolume</code></td>
+<td>Unit Volume</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>endOfLifeDisposalReq</code></td>
+<td>End-of-Life Disposal Req.</td>
+<td>Option</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>salesBlocked</code></td>
+<td>Sales Blocked</td>
+<td>Option</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>purchasingBlocked</code></td>
+<td>Purchase Blocked</td>
+<td>Option</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>itemCategoryCode</code></td>
+<td>Item Category Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>itemCategoryParentCode</code></td>
+<td>Item Category Parent Code</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>itemStatus</code></td>
+<td>Item Status</td>
+<td>Option</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Data Setup Notes:</strong> <code>subCategory</code> requires a Sub Category record; <code>warrantyCategory</code> requires a Warranty Category record; <code>storageWarehouse</code> requires a <strong>Location</strong> record; <code>boxType</code> requires a Box Type record; <code>vatProdPostingGroup</code> requires a <strong>VAT Product Posting Group</strong> record; <code>itemCategoryCode</code> requires an <strong>Item Category</strong> record.</p>
+</blockquote>
+<h4 id="iteminventory-pag50049"><code>itemInventory</code> (PAG50049)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>Item No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>displayName</code></td>
+<td>Description</td>
+<td>Text</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>inventory</code></td>
+<td>Inventory (at Location)</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>locationFilter</code></td>
+<td>Location Filter</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>holdQuarantineQty</code></td>
+<td>Hold / Quarantine Qty.</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>nextPOQuantity</code></td>
+<td>Next PO Quantity</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>nextPODate</code></td>
+<td>Next PO Date</td>
+<td>Date</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>onSalesOrder</code></td>
+<td>Qty. on Sales Order</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>onAssComponent</code></td>
+<td>Qty. on Assembly Component</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lastModifiedDateTime</code></td>
+<td>Last Modified Date</td>
+<td>DateTime</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong><code>locationFilter</code> — Behaviour</strong></p>
+<p><strong>Functional behaviour</strong></p>
+<p>Applying <code>$filter=locationFilter eq 'MAIN'</code> does <strong>not</strong> reduce the number of records returned. Every item in the catalogue is always included in the response regardless of whether it has any stock at the specified location.</p>
+<p>What the filter <em>does</em> change is the value of the calculated inventory fields on each record. When a location filter is active, <code>inventory</code>, <code>onSalesOrder</code>, and <code>onAssComponent</code> are each scoped to that location only — they reflect quantities at the filtered location rather than the company-wide total. An item with no stock at the specified location will still appear in the response, but with <code>inventory: 0</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Records returned</th>
+<th><code>inventory</code> value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No <code>locationFilter</code> applied</td>
+<td>All items</td>
+<td>Company-wide total across all locations</td>
+</tr>
+<tr>
+<td><code>$filter=locationFilter eq 'MAIN'</code></td>
+<td>All items</td>
+<td>Stock at MAIN only (0 if none held there)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<p>Item <code>WIDGET-001</code> has 50 units at <code>MAIN</code> and 20 units at <code>SECONDARY</code>. Item <code>GADGET-002</code> has no stock at <code>MAIN</code> but 10 units at <code>SECONDARY</code>.</p>
+<p>Without filter:</p>
+<pre><code class="lang-json">{ &quot;number&quot;: &quot;WIDGET-001&quot;, &quot;inventory&quot;: 70 }
+{ &quot;number&quot;: &quot;GADGET-002&quot;, &quot;inventory&quot;: 10 }
+</code></pre>
+<p>With <code>$filter=locationFilter eq 'MAIN'</code>:</p>
+<pre><code class="lang-json">{ &quot;number&quot;: &quot;WIDGET-001&quot;, &quot;inventory&quot;: 50 }
+{ &quot;number&quot;: &quot;GADGET-002&quot;, &quot;inventory&quot;: 0 }
+</code></pre>
+<p>Both items are returned in both cases. Only the <code>inventory</code> value changes.</p>
+<p><strong>Technical detail</strong></p>
+<p><code>locationFilter</code> is a Business Central <strong>FlowFilter</strong> field. FlowFilters are not stored values — they are filter parameters that change how <strong>FlowField</strong> calculations are evaluated at runtime. When BC processes an OData <code>$filter</code> clause against a FlowFilter field, it does not apply a row-level predicate to the result set; instead it sets the filter context used when computing the dependent FlowField values (<code>inventory</code>, <code>onSalesOrder</code>, <code>onAssComponent</code>). The field is returned in the response body, but its value will reflect the filter that was applied — if no filter was sent, it will be returned as blank.</p>
+</blockquote>
+<h4 id="itemreferences-pag50050"><code>itemReferences</code> (PAG50050)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>itemNo</code></td>
+<td>Item No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>variantCode</code></td>
+<td>Variant Code</td>
+<td>Code[10]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>unitOfMeasure</code></td>
+<td>Unit of Measure</td>
+<td>Code[10]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>referenceType</code></td>
+<td>Reference Type</td>
+<td>Option</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>referenceTypeNo</code></td>
+<td>Reference Type No.</td>
+<td>Code[30]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>referenceNo</code></td>
+<td>Reference No.</td>
+<td>Code[50]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Description</td>
+<td>Text[100]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>description2</code></td>
+<td>Description 2</td>
+<td>Text[100]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>startingDate</code></td>
+<td>Starting Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>endingDate</code></td>
+<td>Ending Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>supplierRefEntryNo</code></td>
+<td>Supplier Ref. Entry No.</td>
+<td>Integer</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note:</strong> POST will return an error if the item reference already exists (matched by <code>itemNo</code>, <code>variantCode</code>, <code>unitOfMeasure</code>, <code>referenceType</code>, <code>referenceTypeNo</code>, <code>referenceNo</code>). Use PATCH to update existing records. PATCH will rename the record if any key field is changed.</p>
+</blockquote>
+<h4 id="itemunitofmeasure-pag50085"><code>itemUnitOfMeasure</code> (PAG50085)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>itemNo</code></td>
+<td>Item No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>Unit of Measure Code</td>
+<td>Code[10]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>qtyPerUnitOfMeasure</code></td>
+<td>Qty. per Unit of Measure</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>Length</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td>Width</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>Height</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>cubage</code></td>
+<td>Cubage</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>weight</code></td>
+<td>Weight</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Data Setup Notes:</strong> <code>itemNo</code> requires an existing <strong>Item</strong> record; <code>code</code> requires an existing <strong>Unit of Measure</strong> record.</p>
+</blockquote>
+<h4 id="salesorders-pag50051"><code>salesOrders</code> (PAG50051)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>systemId</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>Sales Order No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>customerNo</code></td>
+<td>Customer No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>shipToEMailAddress</code></td>
+<td>Ship-to E-mail Address</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>miscReference1</code></td>
+<td>Miscellaneous Reference 1</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>miscReference2</code></td>
+<td>Miscellaneous Reference 2</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>miscReference3</code></td>
+<td>Miscellaneous Reference 3</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>externalRetailerName</code></td>
+<td>External Retailer Name</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>externalOrderReferences</code></td>
+<td>External Order References</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceName</code></td>
+<td>Invoice Name</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceAdd1</code></td>
+<td>Invoice Address Line 1</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceAdd2</code></td>
+<td>Invoice Address Line 2</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceAdd3</code></td>
+<td>Invoice Address Line 3</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceAdd4</code></td>
+<td>Invoice Address Line 4</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoicePostcode</code></td>
+<td>Invoice Postcode</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>transportMethod</code></td>
+<td>Transport Method</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipmentMethodCode</code></td>
+<td>Shipment Method Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToPhoneNo</code></td>
+<td>Ship-to Phone No.</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToPhoneNo2</code></td>
+<td>Ship-to Phone No. 2</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shippingAgentServiceCode</code></td>
+<td>Shipping Agent Service Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>systemCreatedAt</code></td>
+<td>Created date/time</td>
+<td>DateTime</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>systemCreatedBy</code></td>
+<td>Created by</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>systemModifiedAt</code></td>
+<td>Last modified date/time</td>
+<td>DateTime</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>systemModifiedBy</code></td>
+<td>Last modified by</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Data Setup Notes:</strong> <code>transportMethod</code> requires a <strong>Transport Method</strong> record; <code>shipmentMethodCode</code> requires a <strong>Shipment Method</strong> record; <code>shippingAgentServiceCode</code> requires a <strong>Shipping Agent</strong> record and a corresponding <strong>Shipping Agent Service</strong> record.</p>
+</blockquote>
+<blockquote>
+<p><strong>Known Issues:</strong> <code>shippingAgentServiceCode</code> is exposed without <code>shippingAgentCode</code>. If the Sales Order does not already have a Shipping Agent Code set, sending a service code alone will fail BC validation — the service code is a child of the agent code. Ensure the order has a Shipping Agent Code before patching this field.</p>
+</blockquote>
+<h4 id="saleslines-pag50052--sub-page-of-salesorders"><code>salesLines</code> (PAG50052) — sub-page of <code>salesOrders</code></h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>documentNo</code></td>
+<td>Sales Order No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lineNo</code></td>
+<td>Line No.</td>
+<td>Integer</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>Line Type</td>
+<td>Option</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>no</code></td>
+<td>Item / Account No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Description</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>Quantity</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>unitPrice</code></td>
+<td>Unit Price</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>lineAmount</code></td>
+<td>Line Amount</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>miscLineReference1</code></td>
+<td>Miscellaneous Line Reference 1</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>pcgUniqueLineReference</code></td>
+<td>PCG Unique Line Reference</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>serialNo</code></td>
+<td>Serial No.</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>locationCode</code></td>
+<td>Location Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shippingAgentCode</code></td>
+<td>Shipping Agent Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shippingAgentServiceCode</code></td>
+<td>Shipping Agent Service Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>vehicleRegistration</code></td>
+<td>Vehicle Registration</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>dropNumber</code></td>
+<td>Drop Number</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>Height</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td>Width</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>grossWeight</code></td>
+<td>Gross Weight</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>depth</code></td>
+<td>Depth</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>commodityCode</code></td>
+<td>Commodity Code / Tariff No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>attachToInventoryLine</code></td>
+<td>Attach To Line No.</td>
+<td>Integer</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Data Setup Notes:</strong> <code>no</code> requires an <strong>Item</strong> record when <code>type</code> is <code>Item</code>, or a <strong>G/L Account</strong> record when <code>type</code> is <code>G/L Account</code>; <code>locationCode</code> requires a <strong>Location</strong> record; <code>shippingAgentCode</code> requires a <strong>Shipping Agent</strong> record; <code>shippingAgentServiceCode</code> requires a corresponding <strong>Shipping Agent Service</strong> record.</p>
+</blockquote>
+<blockquote>
+<p><strong>Customer Item Reference Resolution:</strong> When posting or patching a <code>no</code> value on a Sales line, if the supplied value does not match a direct Item No., the system will attempt to resolve it via the customer's item cross-references (<code>Item Reference</code> table, filtered to the order's Sell-to Customer No.). If a matching cross-reference is found, the Item No. is substituted automatically before the line is written. This allows callers to send customer-specific part numbers rather than internal item numbers.</p>
+</blockquote>
+<blockquote>
+<p><strong>Serial No. Tracking:</strong> On insert (POST), if a <code>serialNo</code> is provided, a surplus Reservation Entry is automatically created to register serial number item tracking. On modify (PATCH), if the serial no. changes, the existing tracking entry is replaced with the new value.</p>
+</blockquote>
+<h4 id="salesordercancellations-pag50162"><code>salesOrderCancellations</code> (PAG50162)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>Auto-generated</td>
+</tr>
+<tr>
+<td><code>cancellationType</code></td>
+<td>Cancellation Type</td>
+<td>Enum</td>
+<td>Required. <code>Cancel</code> or <code>Modify</code></td>
+</tr>
+<tr>
+<td><code>customerCode</code></td>
+<td>Customer No.</td>
+<td>Code[20]</td>
+<td>Required — must exist in <strong>Customer</strong> table</td>
+</tr>
+<tr>
+<td><code>orderRef</code></td>
+<td>Order Reference (Your Reference)</td>
+<td>Code</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><code>requestedDeliveryDate</code></td>
+<td>Requested Delivery Date</td>
+<td>Date</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dueDate</code></td>
+<td>Due Date</td>
+<td>Date</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shippingAgentCode</code></td>
+<td>Shipping Agent Code</td>
+<td>Code</td>
+<td>Requires <strong>Shipping Agent</strong> record</td>
+</tr>
+<tr>
+<td><code>locationCode</code></td>
+<td>Location Code</td>
+<td>Code</td>
+<td>Requires <strong>Location</strong> record</td>
+</tr>
+<tr>
+<td><code>vehicleRegistration</code></td>
+<td>Vehicle Registration</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToName</code></td>
+<td>Ship-to Name</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToName2</code></td>
+<td>Ship-to Name 2</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToAddress</code></td>
+<td>Ship-to Address</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToAddress2</code></td>
+<td>Ship-to Address 2</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToCity</code></td>
+<td>Ship-to City</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToCounty</code></td>
+<td>Ship-to County</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToPostCode</code></td>
+<td>Ship-to Post Code</td>
+<td>Code</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToContact</code></td>
+<td>Ship-to Contact</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToEmail</code></td>
+<td>Ship-to E-mail</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>miscReference1</code></td>
+<td>Miscellaneous Reference 1</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>miscReference2</code></td>
+<td>Miscellaneous Reference 2</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>responseText</code></td>
+<td>Response JSON</td>
+<td>Text</td>
+<td>Populated by system after processing</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Known Issues:</strong> Processing errors (e.g. order not found, active warehouse picks) are returned as a JSON string in <code>responseText</code>, <strong>not</strong> as a 4xx HTTP status. An <code>HTTP 200</code> response does not indicate success — always inspect <code>responseText</code> for failure indicators. Avoid sending concurrent requests; the entry number allocation and line table cleanup do not isolate per-request, which can cause collisions under concurrent load.</p>
+</blockquote>
+<h4 id="salesordercancellationlines-pag50165--sub-page"><code>salesOrderCancellationLines</code> (PAG50165) — sub-page</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gNumber</code></td>
+<td>G Number (Item No.)</td>
+<td>Code</td>
+</tr>
+<tr>
+<td><code>cancellationReason</code></td>
+<td>Cancellation Reason</td>
+<td>Text</td>
+</tr>
+<tr>
+<td><code>cancellationDate</code></td>
+<td>Cancellation Date</td>
+<td>Date</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>Quantity</td>
+<td>Decimal</td>
+</tr>
+</tbody>
+</table>
+<h4 id="purchaseorders-pag50087"><code>purchaseOrders</code> (PAG50087)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>orderNumber</code></td>
+<td>Purchase Order No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>orderDate</code></td>
+<td>Order Date</td>
+<td>Date</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>supplierCode</code></td>
+<td>Vendor No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>orderType</code></td>
+<td>Order Type</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>requiredByDate</code></td>
+<td>Expected Receipt Date</td>
+<td>Date</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>destinationWarehouse</code></td>
+<td>Location Code</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>containerType</code></td>
+<td>Container Type</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Status</td>
+<td>Option</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>currencyCode</code></td>
+<td>Currency Code</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h4 id="purchaseorderlines-pag50181--sub-page-of-purchaseorders"><code>purchaseOrderLines</code> (PAG50181) — sub-page of <code>purchaseOrders</code></h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>itemNo</code></td>
+<td>Item No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Description</td>
+<td>Text</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>quantityOrdered</code></td>
+<td>Quantity Ordered</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>directUnitCost</code></td>
+<td>Direct Unit Cost</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>quantityReceived</code></td>
+<td>Quantity Received</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>quantityInvoiced</code></td>
+<td>Quantity Invoiced</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h4 id="purchaseordercancellations-pag50229"><code>purchaseOrderCancellations</code> (PAG50229)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>Auto-generated</td>
+</tr>
+<tr>
+<td><code>cancellationType</code></td>
+<td>Cancellation Type</td>
+<td>Enum</td>
+<td>Required. <code>Cancel</code> or <code>Modify</code></td>
+</tr>
+<tr>
+<td><code>customerCode</code></td>
+<td>Vendor No.</td>
+<td>Code[20]</td>
+<td>Required — must exist in <strong>Vendor</strong> table</td>
+</tr>
+<tr>
+<td><code>orderRef</code></td>
+<td>Order Reference</td>
+<td>Code</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><code>locationCode</code></td>
+<td>Location Code</td>
+<td>Code</td>
+<td>Requires <strong>Location</strong> record</td>
+</tr>
+<tr>
+<td><code>responseText</code></td>
+<td>Response JSON</td>
+<td>Text</td>
+<td>Populated by system after processing</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Known Issues:</strong> Same response pattern as <code>salesOrderCancellations</code> — inspect <code>responseText</code> for failure, not only HTTP status. Note also that the <code>customerCode</code> JSON property maps to the <strong>Vendor Code</strong> field internally; BC error messages will reference &quot;Vendor Code&quot;, not &quot;Customer Code&quot;. Concurrent requests carry the same collision risks as <code>salesOrderCancellations</code>.</p>
+</blockquote>
+<h4 id="purchaseordercancellationlines-pag50230--sub-page"><code>purchaseOrderCancellationLines</code> (PAG50230) — sub-page</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gNumber</code></td>
+<td>G Number (Item No.)</td>
+<td>Code</td>
+</tr>
+<tr>
+<td><code>cancellationReason</code></td>
+<td>Cancellation Reason</td>
+<td>Text</td>
+</tr>
+<tr>
+<td><code>cancellationDate</code></td>
+<td>Cancellation Date</td>
+<td>Date</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>Quantity</td>
+<td>Decimal</td>
+</tr>
+</tbody>
+</table>
+<h4 id="pcgpalletisedloadbuilds-pag50164"><code>pcgPalletisedLoadBuilds</code> (PAG50164)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>systemId</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>salesOrderNo</code></td>
+<td>Sales Order No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>collectionReference</code></td>
+<td>Collection Reference</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>loadReference</code></td>
+<td>Load Reference</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>collectionDate</code></td>
+<td>Collection Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>deliveryDate</code></td>
+<td>Delivery Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Sales Order Status</td>
+<td>Option</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Data Setup Notes:</strong> <code>salesOrderNo</code> must reference an existing open <strong>Sales Order</strong> (Sales Header table). The order must already exist before posting this record.</p>
+</blockquote>
+<blockquote>
+<p><strong>Known Issues:</strong> Sales Order must be in <strong>Open</strong> status; a Released order will be rejected, returning <code>HTTP 500</code> with an error message in the body.</p>
+</blockquote>
+<p><strong>Bound Action — <code>submit</code></strong></p>
+<pre><code>POST /api/technologyManagement/integrations/v2.0/pcgPalletisedLoadBuilds({id})/Microsoft.NAV.submit
+</code></pre>
+<p>Triggers palletised load processing for the identified Sales Order. Validates the payload, processes all pallet lines, and creates Warehouse Shipments. Returns the updated entity.</p>
+<table>
+<thead>
+<tr>
+<th>Detail</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parameters</td>
+<td>None — entity resolved from <code>{id}</code> in the URL</td>
+</tr>
+<tr>
+<td>Resolves order by</td>
+<td><code>id</code> (SystemId) or <code>salesOrderNo</code></td>
+</tr>
+<tr>
+<td>On success</td>
+<td>Warehouse Shipments created; returns updated entity</td>
+</tr>
+<tr>
+<td>On failure</td>
+<td>HTTP error with processing error message</td>
+</tr>
+</tbody>
+</table>
+<h4 id="pcgpalletisedloadlines-pag50163--sub-page-of-pcgpalletisedloadbuilds"><code>pcgPalletisedLoadLines</code> (PAG50163) — sub-page of <code>pcgPalletisedLoadBuilds</code></h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>documentNo</code></td>
+<td>Sales Order No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lineNo</code></td>
+<td>Line No.</td>
+<td>Integer</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>Item No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>itemReferenceNumber</code></td>
+<td>Item Reference No.</td>
+<td>Code[50]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>Quantity on Sales Line</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>quantityOnLoad</code></td>
+<td>Quantity on Load</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>quantityToCancel</code></td>
+<td>Quantity to Cancel</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>palletQuantityOnLoad</code></td>
+<td>Pallet Quantity on Load</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>weightOnLoad</code></td>
+<td>Weight on Load</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>unitsOnLoad</code></td>
+<td>Units on Load</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>palletRequirements</code></td>
+<td>Pallet Requirements</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipmentTag</code></td>
+<td>Shipment Tag</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipmentDate</code></td>
+<td>Shipment Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="salesreturnorders-pag50231"><code>salesReturnOrders</code> (PAG50231)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>Document No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>externalDocumentNumber</code></td>
+<td>External Document No.</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>orderDate</code></td>
+<td>Document Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>postingDate</code></td>
+<td>Posting Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>customerId</code></td>
+<td>Customer Id (Sell-to)</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>customerNumber</code></td>
+<td>Customer No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>customerName</code></td>
+<td>Customer Name</td>
+<td>Text</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>billToName</code></td>
+<td>Bill-to Name</td>
+<td>Text</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>billToCustomerId</code></td>
+<td>Bill-to Customer Id</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>billToCustomerNumber</code></td>
+<td>Bill-to Customer No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToName</code></td>
+<td>Ship-to Name</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToContact</code></td>
+<td>Ship-to Contact</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>sellToAddressLine1</code></td>
+<td>Sell-to Address</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>sellToAddressLine2</code></td>
+<td>Sell-to Address 2</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>sellToCity</code></td>
+<td>Sell-to City</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>sellToCountry</code></td>
+<td>Sell-to Country/Region Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>sellToState</code></td>
+<td>Sell-to County</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>sellToPostCode</code></td>
+<td>Sell-to Post Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>billToAddressLine1</code></td>
+<td>Bill-to Address</td>
+<td>Text</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>billToAddressLine2</code></td>
+<td>Bill-to Address 2</td>
+<td>Text</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>billToCity</code></td>
+<td>Bill-to City</td>
+<td>Text</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>billToCountry</code></td>
+<td>Bill-to Country/Region Code</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>billToState</code></td>
+<td>Bill-to County</td>
+<td>Text</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>billToPostCode</code></td>
+<td>Bill-to Post Code</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>shipToAddressLine1</code></td>
+<td>Ship-to Address</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToAddressLine2</code></td>
+<td>Ship-to Address 2</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToCity</code></td>
+<td>Ship-to City</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToCountry</code></td>
+<td>Ship-to Country/Region Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToState</code></td>
+<td>Ship-to County</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToPostCode</code></td>
+<td>Ship-to Post Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shortcutDimension1Code</code></td>
+<td>Shortcut Dimension 1 Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shortcutDimension2Code</code></td>
+<td>Shortcut Dimension 2 Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>currencyId</code></td>
+<td>Currency Id</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>currencyCode</code></td>
+<td>Currency Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>pricesIncludeTax</code></td>
+<td>Prices Including VAT</td>
+<td>Boolean</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>paymentTermsId</code></td>
+<td>Payment Terms Id</td>
+<td>Guid</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipmentMethodId</code></td>
+<td>Shipment Method Id</td>
+<td>Guid</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>salesperson</code></td>
+<td>Salesperson Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>partialShipping</code></td>
+<td>Partial Shipping</td>
+<td>Boolean</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>requestedDeliveryDate</code></td>
+<td>Requested Delivery Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>discountAmount</code></td>
+<td>Invoice Discount Amount</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>discountAppliedBeforeTax</code></td>
+<td>Discount Applied Before Tax</td>
+<td>Boolean</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>totalAmountExcludingTax</code></td>
+<td>Total Amount Excluding Tax</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>totalTaxAmount</code></td>
+<td>Total Tax Amount</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>totalAmountIncludingTax</code></td>
+<td>Total Amount Including Tax</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>fullyShipped</code></td>
+<td>Fully Shipped</td>
+<td>Boolean</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Status</td>
+<td>Option</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lastModifiedDateTime</code></td>
+<td>Last Modified Date Time</td>
+<td>DateTime</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>phoneNumber</code></td>
+<td>Sell-to Phone No.</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>Sell-to E-Mail</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Data Setup Notes:</strong> <code>paymentTermsId</code> accepts a Guid — if the value does not match a Payment Terms record, an error is raised. <code>shipmentMethodId</code> likewise accepts a Guid matching a Shipment Method record. <code>customerId</code>, <code>billToCustomerId</code>, and <code>currencyId</code> are read-only Guids resolved from the Customer and Currency tables via <code>OnAfterGetRecord</code>.</p>
+</blockquote>
+<h4 id="salesreturnlines-pag50232--sub-page-of-salesreturnorders"><code>salesReturnLines</code> (PAG50232) — sub-page of <code>salesReturnOrders</code></h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>documentId</code></td>
+<td>Document Id</td>
+<td>Text[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>sequence</code></td>
+<td>Line No.</td>
+<td>Integer</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>itemId</code></td>
+<td>Item Id</td>
+<td>Text[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>accountId</code></td>
+<td>Account Id</td>
+<td>Text[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>lineType</code></td>
+<td>Line Type</td>
+<td>Option</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>lineObjectNumber</code></td>
+<td>Item / Account No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Description</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>description2</code></td>
+<td>Description 2</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>unitOfMeasureId</code></td>
+<td>Unit of Measure Id</td>
+<td>Guid</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>unitOfMeasureCode</code></td>
+<td>Unit of Measure Code</td>
+<td>Code[10]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>Quantity</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>unitPrice</code></td>
+<td>Unit Price</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>discountAmount</code></td>
+<td>Line Discount Amount</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>discountPercent</code></td>
+<td>Line Discount %</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>discountAppliedBeforeTax</code></td>
+<td>Discount Applied Before Tax</td>
+<td>Boolean</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>amountExcludingTax</code></td>
+<td>Amount Excluding Tax</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>taxCode</code></td>
+<td>VAT Prod. Posting Group</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>taxPercent</code></td>
+<td>VAT %</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>totalTaxAmount</code></td>
+<td>Total Tax Amount</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>amountIncludingTax</code></td>
+<td>Amount Including Tax</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>invoiceDiscountAllocation</code></td>
+<td>Invoice Discount Allocation</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>netAmount</code></td>
+<td>Net Amount</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>netTaxAmount</code></td>
+<td>Net Tax Amount</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>netAmountIncludingTax</code></td>
+<td>Net Amount Including Tax</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>shipmentDate</code></td>
+<td>Shipment Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shippedQuantity</code></td>
+<td>Return Qty. Received</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>invoicedQuantity</code></td>
+<td>Quantity Invoiced</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>invoiceQuantity</code></td>
+<td>Qty. to Invoice</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipQuantity</code></td>
+<td>Return Qty. to Receive</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>itemVariantId</code></td>
+<td>Item Variant Id</td>
+<td>Guid</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>locationId</code></td>
+<td>Location Id</td>
+<td>Guid</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Customer Item Reference Resolution:</strong> When posting or patching a <code>lineObjectNumber</code> value on a return line, if the supplied value does not match a direct Item No., the system will attempt to resolve it via the customer's item cross-references (<code>Item Reference</code> table, filtered to the return order's Customer No.). If a matching cross-reference is found, the Item No. is substituted automatically before the line is written. This allows callers to send customer-specific part numbers rather than internal item numbers.</p>
+</blockquote>
+<h4 id="salesreturnordersext-pag50233"><code>salesReturnOrdersExt</code> (PAG50233)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>systemId</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>Document No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>customerNo</code></td>
+<td>Customer No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToEMailAddress</code></td>
+<td>Ship-to E-mail Address</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>miscReference1</code></td>
+<td>Miscellaneous Reference 1</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>miscReference2</code></td>
+<td>Miscellaneous Reference 2</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>miscReference3</code></td>
+<td>Miscellaneous Reference 3</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>externalRetailerName</code></td>
+<td>External Retailer Name</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>externalOrderReferences</code></td>
+<td>External Order References</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceName</code></td>
+<td>Invoice Name</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceAdd1</code></td>
+<td>Invoice Address Line 1</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceAdd2</code></td>
+<td>Invoice Address Line 2</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceAdd3</code></td>
+<td>Invoice Address Line 3</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoiceAdd4</code></td>
+<td>Invoice Address Line 4</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>invoicePostcode</code></td>
+<td>Invoice Postcode</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>transportMethod</code></td>
+<td>Transport Method</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipmentMethodCode</code></td>
+<td>Shipment Method Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToPhoneNo</code></td>
+<td>Ship-to Phone No.</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shipToPhoneNo2</code></td>
+<td>Ship-to Phone No. 2</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shippingAgentServiceCode</code></td>
+<td>Shipping Agent Service Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shippingAgentCode</code></td>
+<td>Shipping Agent Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>systemCreatedAt</code></td>
+<td>Created date/time</td>
+<td>DateTime</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>systemCreatedBy</code></td>
+<td>Created by</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>systemModifiedAt</code></td>
+<td>Last modified date/time</td>
+<td>DateTime</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>systemModifiedBy</code></td>
+<td>Last modified by</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note:</strong> <code>salesReturnOrdersExt</code> / <code>salesReturnOrdersExt</code> expose only the custom PCG/TM fields alongside the system identifier and document number. Use <code>salesReturnOrders</code> (PAG50231) when you need the full standard address and header fields.</p>
+</blockquote>
+<h4 id="salesreturnlinesext-pag50234--sub-page-of-salesreturnordersext"><code>salesReturnLinesExt</code> (PAG50234) — sub-page of <code>salesReturnOrdersExt</code></h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>documentNo</code></td>
+<td>Document No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lineNo</code></td>
+<td>Line No.</td>
+<td>Integer</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>Line Type</td>
+<td>Option</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>no</code></td>
+<td>Item / Account No.</td>
+<td>Code[20]</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Description</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>Quantity</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>unitPrice</code></td>
+<td>Unit Price</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>lineAmount</code></td>
+<td>Line Amount</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>miscLineReference1</code></td>
+<td>Miscellaneous Line Reference 1</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>pcgUniqueLineReference</code></td>
+<td>PCG Unique Line Reference</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>serialNo</code></td>
+<td>Serial No.</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>locationCode</code></td>
+<td>Location Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shippingAgentServiceCode</code></td>
+<td>Shipping Agent Service Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>shippingAgentCode</code></td>
+<td>Shipping Agent Code</td>
+<td>Code</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>Height</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td>Width</td>
+<td>Decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>grossWeight</code></td>
+<td>Gross Weight</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>depth</code></td>
+<td>Depth</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>commodityCode</code></td>
+<td>Commodity Code / Tariff No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>vehicleRegistration</code></td>
+<td>Vehicle Registration</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>dropNumber</code></td>
+<td>Drop Number</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>attachToInventoryLine</code></td>
+<td>Attach To Line No.</td>
+<td>Integer</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Serial No. Tracking:</strong> On insert, if a <code>serialNo</code> is provided, a surplus Reservation Entry is automatically created to register serial number item tracking. On modify, if the serial no. changes, the existing tracking entry is replaced with the new value. Fields <code>height</code>, <code>depth</code>, and <code>commodityCode</code> are read-only — they are populated from the Item card via <code>PopulateItemData</code>. <code>grossWeight</code> is read-only on PATCH but can be provided on POST via the insert handler.</p>
+</blockquote>
+<h4 id="warehousereceiptfreight-pag50167"><code>warehouseReceiptFreight</code> (PAG50167)</h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>receiptNumber</code></td>
+<td>Warehouse Receipt No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>locationCode</code></td>
+<td>Location Code</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>assignedUserId</code></td>
+<td>Assigned User ID</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>postingDate</code></td>
+<td>Posting Date</td>
+<td>Date</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lastFreeDate</code></td>
+<td>Last Free Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>containerNumber</code></td>
+<td>Container Number</td>
+<td>Code/Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>vesselName</code></td>
+<td>Vessel Name</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>inboundBookingDate</code></td>
+<td>Inbound Booking Date</td>
+<td>Date</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>inboundBookingTime</code></td>
+<td>Inbound Booking Time</td>
+<td>Time</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>freightForwarder</code></td>
+<td>Freight Forwarder</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>portOfDischarge</code></td>
+<td>Port of Discharge</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>portOfLoading</code></td>
+<td>Port of Loading</td>
+<td>Text</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="warehousereceiptfreightlines-pag50169--sub-page-of-warehousereceiptfreight"><code>warehouseReceiptFreightLines</code> (PAG50169) — sub-page of <code>warehouseReceiptFreight</code></h4>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+<th>Editable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>System identifier</td>
+<td>Guid</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>orderNo</code></td>
+<td>Source Order No.</td>
+<td>Code</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>itemNo</code></td>
+<td>Item No.</td>
+<td>Code[20]</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Description</td>
+<td>Text</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>Quantity</td>
+<td>Decimal</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Read-only:</strong> All fields on <code>warehouseReceiptFreightLines</code> are read-only. This is a reporting sub-page that displays the line items received on the warehouse receipt.</p>
+</blockquote>
+<hr>
+<h2 id="service-enabled-procedures">Service-Enabled Procedures</h2>
+<h3 id="submit--palletised-load-build"><code>submit</code> — Palletised Load Build</h3>
+<p><strong>OData Bound Action</strong></p>
+<pre><code>POST /api/technologyManagement/integrations/v2.0/pcgPalletisedLoadBuilds({id})/Microsoft.NAV.submit
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Defined in</td>
+<td><code>PAG50164 &quot;PCG Pallet Load Build TMA2B9&quot;</code></td>
+</tr>
+<tr>
+<td>Signature</td>
+<td><code>procedure submit(var ActionContext: WebServiceActionContext)</code></td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>None in body — entity resolved via <code>{id}</code> in the URL</td>
+</tr>
+<tr>
+<td>Returns</td>
+<td>Updated <code>pcgPalletisedLoadBuild</code> entity</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Behaviour</strong>:</p>
+<ol>
+<li>Resolves the real <code>Sales Header</code> record from the temp record's <code>SystemId</code> or <code>No.</code>.</li>
+<li>Calls <code>PCGPalletLoadAPIHandlerTMA2B9.ProcessPayload()</code> to validate and process all pallet lines.</li>
+<li>Builds Warehouse Shipment(s) via <code>PCGWhseShpmtBuilder</code>.</li>
+<li>Reloads the temp record from the updated Sales Header.</li>
+<li>Sets <code>ActionContext</code> result to <code>Updated</code>, returning the refreshed entity to the caller.</li>
+</ol>
+<p>Errors are returned as HTTP errors with a descriptive message.</p>
+<hr>
+<h3 id="getorcreatewarehousereceipt--warehouse-receipt-lookup"><code>GetOrCreateWarehouseReceipt</code> — Warehouse Receipt Lookup</h3>
+<p><strong>OData / SOAP Function</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Defined in</td>
+<td><code>COD50086 &quot;Whse. Receipt Lookup TMA2B9&quot;</code></td>
+</tr>
+<tr>
+<td>Signature</td>
+<td><code>procedure GetOrCreateWarehouseReceipt(documentType: Text; documentNo: Code[20]): Code[20]</code></td>
+</tr>
+<tr>
+<td>Returns</td>
+<td>Warehouse Receipt No. (<code>Code[20]</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parameters</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Accepted Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>documentType</code></td>
+<td>Text</td>
+<td>Yes</td>
+<td><code>&quot;Purchase&quot;</code> or <code>&quot;Transfer&quot;</code> (case-insensitive)</td>
+</tr>
+<tr>
+<td><code>documentNo</code></td>
+<td>Code[20]</td>
+<td>Yes</td>
+<td>Existing Purchase Order or Transfer Order No.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Behaviour</strong>:</p>
+<ol>
+<li>Validates <code>documentNo</code> is not blank.</li>
+<li>Parses <code>documentType</code> to the internal <code>Warehouse Activity Source Document</code> enum — errors if unrecognised.</li>
+<li>Verifies the source document exists (Purchase Order or Transfer Header).</li>
+<li>Returns the existing Warehouse Receipt No. if one already references that source document.</li>
+<li>If no receipt exists, creates a new Warehouse Receipt and returns its No.</li>
+</ol>
+<p>This is Step 1 of the P8 Freight Shipping Info workflow. See <a href="#p8--freight-shipping-info-1">Caller Workflows — P8</a> for the full sequence.</p>
+<hr>
+<h2 id="caller-workflows">Caller Workflows</h2>
+<p>This section describes the complete sequence of HTTP calls required for integrations that involve more than one request.</p>
+<hr>
+<h3 id="p7--palletised-load-build">P7 — Palletised Load Build</h3>
+<p>Two calls are required: one to write the pallet load data, then a second to trigger processing.</p>
+<p><strong>Step 1 — Write pallet load assignments (deep insert)</strong></p>
+<pre><code class="lang-http">POST .../pcgPalletisedLoadBuilds
+Content-Type: application/json
+
+{
+  &quot;salesOrderNo&quot;: &quot;SO001234&quot;,
+  &quot;collectionReference&quot;: &quot;COL-001&quot;,
+  &quot;loadReference&quot;: &quot;LOAD-001&quot;,
+  &quot;collectionDate&quot;: &quot;2026-05-01&quot;,
+  &quot;deliveryDate&quot;: &quot;2026-05-02&quot;,
+  &quot;pcgPalletisedLoadLines&quot;: [
+    { ... }
+  ]
+}
+</code></pre>
+<p>The response body contains the created record including its <code>id</code> (SystemId). Capture this for Step 2.</p>
+<p><strong>Step 2 — Trigger processing</strong></p>
+<pre><code class="lang-http">POST .../pcgPalletisedLoadBuilds({id})/Microsoft.NAV.submit
+Content-Type: application/json
+
+{}
+</code></pre>
+<p>On success, returns the updated <code>pcgPalletisedLoadBuild</code> entity (<code>HTTP 200</code>). On failure, returns an HTTP error with the processing error message.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>POST</td>
+<td><code>pcgPalletisedLoadBuilds</code></td>
+<td>Write pallet load header + lines</td>
+</tr>
+<tr>
+<td>2</td>
+<td>POST</td>
+<td><code>pcgPalletisedLoadBuilds({id})/Microsoft.NAV.submit</code></td>
+<td>Validate, process lines, create Warehouse Shipments</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="p8--freight-shipping-info">P8 — Freight Shipping Info</h3>
+<p>Three calls are required: look up or create a Warehouse Receipt, find the API record by receipt number, then update the freight fields.</p>
+<p><strong>Step 1 — Get or create Warehouse Receipt</strong></p>
+<pre><code class="lang-http">POST .../ODataV4/Whse_Receipt_Lookup_TMA2B9_GetOrCreateWarehouseReceipt
+Content-Type: application/json
+
+{
+  &quot;documentType&quot;: &quot;Purchase&quot;,
+  &quot;documentNo&quot;: &quot;PO001234&quot;
+}
+</code></pre>
+<p>The response contains the Warehouse Receipt No. (e.g. <code>&quot;WR001234&quot;</code>). Capture this for Step 2.</p>
+<p>Accepted values for <code>documentType</code>: <code>&quot;Purchase&quot;</code> or <code>&quot;Transfer&quot;</code> (case-insensitive).</p>
+<p><strong>Step 2 — Locate the <code>warehouseReceiptFreight</code> record</strong></p>
+<pre><code class="lang-http">GET .../warehouseReceiptFreight?$filter=receiptNumber eq 'WR001234'
+</code></pre>
+<p>The response returns the matching record. Capture its <code>id</code> for Step 3.</p>
+<p><strong>Step 3 — Update freight fields</strong></p>
+<pre><code class="lang-http">PATCH .../warehouseReceiptFreight({id})
+Content-Type: application/json
+
+{
+  &quot;lastFreeDate&quot;: &quot;2026-05-10&quot;,
+  &quot;containerNumber&quot;: &quot;CONT-XYZ&quot;,
+  &quot;vesselName&quot;: &quot;MV Example&quot;,
+  &quot;inboundBookingDate&quot;: &quot;2026-05-08&quot;,
+  &quot;inboundBookingTime&quot;: &quot;09:00:00&quot;,
+  &quot;freightForwarder&quot;: &quot;Acme Freight&quot;,
+  &quot;portOfDischarge&quot;: &quot;Felixstowe&quot;,
+  &quot;portOfLoading&quot;: &quot;Shanghai&quot;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>POST</td>
+<td><code>GetOrCreateWarehouseReceipt</code> web service</td>
+<td>Get or create Warehouse Receipt; returns receipt number</td>
+</tr>
+<tr>
+<td>2</td>
+<td>GET</td>
+<td><code>warehouseReceiptFreight?$filter=receiptNumber eq '{no}'</code></td>
+<td>Locate the API record; returns <code>id</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>PATCH</td>
+<td><code>warehouseReceiptFreight({id})</code></td>
+<td>Write freight fields</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="sales-return-orders--patch">Sales Return Orders — PATCH</h3>
+<p>Two strategies are available depending on which fields need updating. Use the <strong>full</strong> endpoint pair when updating standard header or line fields; use the <strong>slim</strong> endpoint pair when updating only PCG-specific custom fields.</p>
+<hr>
+<h4 id="full-order-salesreturnorders--salesreturnlines">Full Order (<code>salesReturnOrders</code> / <code>salesReturnLines</code>)</h4>
+<p><strong>Step 1 — Locate the return order</strong></p>
+<pre><code class="lang-http">GET .../salesReturnOrders?$filter=number eq 'SRO001234'
+</code></pre>
+<p>The response returns the matching record. Capture the <code>systemId</code> value for Step 2.</p>
+<p><strong>Step 2 — Update header fields</strong></p>
+<pre><code class="lang-http">PATCH .../salesReturnOrders({systemId})
+Content-Type: application/json
+If-Match: *
+
+{
+  &quot;externalDocumentNumber&quot;: &quot;CUST-REF-001&quot;,
+  &quot;requestedDeliveryDate&quot;: &quot;2026-06-01&quot;,
+  &quot;shipToName&quot;: &quot;Customer Warehouse&quot;,
+  &quot;miscReference1&quot;: &quot;REF001&quot;
+}
+</code></pre>
+<p>Only include the fields that need to be changed — fields omitted from the body are left unchanged.</p>
+<p><strong>Step 3 (optional) — Locate return lines</strong></p>
+<p>To update a specific line, first retrieve the lines to obtain each line's <code>id</code>:</p>
+<pre><code class="lang-http">GET .../salesReturnOrders({systemId})/salesReturnLines
+</code></pre>
+<p><strong>Step 4 (optional) — Update a return line</strong></p>
+<pre><code class="lang-http">PATCH .../salesReturnOrders({systemId})/salesReturnLines({lineId})
+Content-Type: application/json
+If-Match: *
+
+{
+  &quot;rtbCondition&quot;: &quot;Used&quot;,
+  &quot;rtbRoutingCode&quot;: &quot;ROUTE-A&quot;,
+  &quot;quantity&quot;: 2
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>GET</td>
+<td><code>salesReturnOrders?$filter=number eq '{no}'</code></td>
+<td>Locate return order; returns <code>systemId</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>PATCH</td>
+<td><code>salesReturnOrders({systemId})</code></td>
+<td>Update header fields</td>
+</tr>
+<tr>
+<td>3</td>
+<td>GET</td>
+<td><code>salesReturnOrders({systemId})/salesReturnLines</code></td>
+<td>Retrieve lines; returns line <code>id</code> values</td>
+</tr>
+<tr>
+<td>4</td>
+<td>PATCH</td>
+<td><code>salesReturnOrders({systemId})/salesReturnLines({lineId})</code></td>
+<td>Update a specific return line</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Steps 3 and 4 may be omitted when only header fields need updating.</p>
+</blockquote>
+<hr>
+<h4 id="slim-salesreturnordersext--salesreturnlinesext">Slim (<code>salesReturnOrdersExt</code> / <code>salesReturnLinesExt</code>)</h4>
+<p>Use <code>salesReturnOrdersExt</code> when only PCG-specific custom fields need updating. The slim endpoint exposes only custom fields alongside the system identifier and document number, so the request body can be kept minimal.</p>
+<p><strong>Step 1 — Locate the return order</strong></p>
+<pre><code class="lang-http">GET .../salesReturnOrdersExt?$filter=number eq 'SRO001234'
+</code></pre>
+<p>The response returns the matching record. Capture the <code>systemId</code> value for Step 2.</p>
+<p><strong>Step 2 — Update custom fields</strong></p>
+<pre><code class="lang-http">PATCH .../salesReturnOrdersExt({systemId})
+Content-Type: application/json
+If-Match: *
+
+{
+  &quot;miscReference1&quot;: &quot;REF001&quot;,
+  &quot;miscReference2&quot;: &quot;REF002&quot;,
+  &quot;externalRetailerName&quot;: &quot;Retailer Name&quot;,
+  &quot;externalOrderReferences&quot;: &quot;EXT-ORDER-001&quot;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>GET</td>
+<td><code>salesReturnOrdersExt?$filter=number eq '{no}'</code></td>
+<td>Locate return order; returns <code>systemId</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>PATCH</td>
+<td><code>salesReturnOrdersExt({systemId})</code></td>
+<td>Update PCG custom fields</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Choosing between Full and Slim:</strong> If the caller only needs to write custom PCG fields (e.g. <code>miscReference1</code>, <code>externalRetailerName</code>), prefer <code>salesReturnOrdersExt</code> — the payload is smaller and the request will not inadvertently touch standard BC header fields. Use <code>salesReturnOrders</code> when standard fields (address, dates, shipping details, RTB line fields) also need to be written.</p>
+</blockquote>
+<hr>
+<h2 id="functional-areas">Functional Areas</h2>
+<h3 id="common--setup">Common / Setup</h3>
+<p>Central configuration and integration framework objects shared across all functional areas.</p>
+<p><strong>Setup Page</strong>: PAG50086 <code>PCG Setup TMA2B9</code> (Card page — not an API endpoint)</p>
+<table>
+<thead>
+<tr>
+<th>Setup Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connector Code</td>
+<td>TMXIF connection to PCG API</td>
+</tr>
+<tr>
+<td>Auto-Send Manifest</td>
+<td>Automatically send manifests on shipment posting</td>
+</tr>
+<tr>
+<td>Manifest Batch Mode</td>
+<td>Send manifests in batch</td>
+</tr>
+<tr>
+<td>Auto-Release Pallet Load</td>
+<td>Automatically release palletised load on creation</td>
+</tr>
+<tr>
+<td>RTB Customer No.</td>
+<td>Default customer for RTB return sales orders</td>
+</tr>
+<tr>
+<td>RTB Location Code</td>
+<td>Default location for RTB returns</td>
+</tr>
+<tr>
+<td>Retry Count</td>
+<td>Number of retries on manifest send failure</td>
+</tr>
+<tr>
+<td>Failure Email</td>
+<td>Email address for manifest send failure alerts</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TMXIF Integration</strong>: The app extends the <code>Int. Connector TMXIF</code> (51910) table and card with two additional fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCG API Version</td>
+<td>Code[10]</td>
+<td>Target API version</td>
+</tr>
+<tr>
+<td>OAuth Token Endpoint</td>
+<td>Text[250]</td>
+<td>OAuth2 token URL for authentication</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="p5--order-cancellation">P5 — Order Cancellation</h3>
+<p>Handles inbound cancellation or modification requests for both Sales Orders and Purchase Orders. The caller POSTs a cancellation request with a header and lines in a single call. The system validates the order, checks for active warehouse picks or posted receipts, and either removes the specified lines or deletes the order entirely.</p>
+<p>The <code>responseText</code> field on the returned record contains a JSON object indicating success or failure. See the <a href="#api-endpoint-reference">API Endpoint Reference</a> for request body examples.</p>
+<p><strong>Flow</strong>:</p>
+<pre><code>POST salesOrderCancellations  →  Sales Cancel Request + Lines inserted
+  → OnInsert  →  SalesOrderCancelMgt.ProcessCancellation()
+      → Find Sales Order  →  Check picks/shipments  →  Reopen if needed
+      → Delete requested lines or full order  →  Archive
+      → SalesCancelResponse.BuildSuccessResponse() / BuildErrorResponse()
+      → responseText field populated on record
+
+POST purchaseOrderCancellations  →  PO Cancel Request + Lines inserted
+  → OnInsert  →  POCancelMgt.ProcessCancellation()
+      → Find Purchase Order  →  Check receipts  →  Reopen if needed
+      → Delete requested lines or full order  →  Archive
+      → POCancelResponse.BuildSuccessResponse() / BuildErrorResponse()
+      → responseText field populated on record
+</code></pre>
+<p><strong>Cancellation Type values:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Cancel</code></td>
+<td>Remove the specified lines (or the entire order if all lines are cancelled)</td>
+</tr>
+<tr>
+<td><code>Modify</code></td>
+<td>Modify the order — lines are removed and the order is re-released with remaining lines</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="p6--sales-order-line-dispatch">P6 — Sales Order Line Dispatch</h3>
+<p>Outbound only. When a Sales Shipment is posted in Business Central, the system automatically builds a JSON dispatch confirmation payload and sends it to the configured PCG endpoint. No inbound API call is required for this area.</p>
+<p><strong>Flow</strong>:</p>
+<pre><code>Sales Shipment Header  →  OnAfterInsert event
+  →  DispConfOutboundMgt.CreateOutboundEntityChange()
+      →  Resolves Connector Code from PCG Setup
+      →  Inserts Outbound Entity Change TMXIF record
+
+  [TMXIF Integration Framework processes pending changes]
+  →  DispConfExportAPI.OnRun()  (TableNo = Int. Entity Interface TMXIF)
+      →  ManifestJSONBuilder.BuildCompleteDispatchConfirmation()
+      →  TMXIF communication library exports JSON payload
+</code></pre>
+<p>The payload is a JSON array — one flat object per shipment line. See <a href="#p6-sales-order-line-dispatch">Outbound JSON Payloads — P6 Sales Order Line Dispatch</a> for the full structure.</p>
+<hr>
+<h3 id="p7--palletised-load-build-1">P7 — Palletised Load Build</h3>
+<p>Inbound integration — PCG POSTs palletised load assignments against existing Sales Orders. The app validates the payload, processes lines, creates Warehouse Shipments, and optionally releases the Sales Order.</p>
+<p><strong>Flow</strong>:</p>
+<pre><code>POST pcgPalletisedLoadBuilds  →  Sales Header (temp) + Lines inserted
+  →  OnInsert  →  PCGPalletLoadAPIHandler.Handle()
+      →  ValidateHeaderState()  →  ValidateHeaderFields()  →  ValidateLines()
+      →  PCGPalletisedLineProcessor.ProcessLines()
+          →  PCGWhseShpmtBuilder.BuildShipments()
+      →  (optional) ReleaseSalesOrder()
+</code></pre>
+<p><strong>Buffer Table</strong> (TAB50164 <code>Palletised Load Buffer TMA2B9</code>) — temporary, holds processing state including <code>Error Message</code> and <code>Result JSON</code>.</p>
+<p>See <a href="#p7--palletised-load-build-1">Caller Workflows — P7</a> for the full step-by-step request sequence.</p>
+<hr>
+<h3 id="p8--freight-shipping-info-1">P8 — Freight Shipping Info</h3>
+<p>Two-step integration:</p>
+<ol>
+<li><strong>Step 1 (Lookup)</strong>: <code>WhseReceiptLookup.GetOrCreateWarehouseReceipt()</code> — given a document type and number, returns the Warehouse Receipt No. (creates a receipt if none exists).</li>
+<li><strong>Step 2 (Update)</strong>: <code>GET/PATCH warehouseReceiptFreight</code> — PCG reads or updates freight-specific fields on the Warehouse Receipt Header.</li>
+</ol>
+<p>The lookup codeunit supports <code>Purchase Order</code> and <code>Transfer Order</code> document types.</p>
+<p>See <a href="#p8--freight-shipping-info-1">Caller Workflows — P8</a> for the full step-by-step request sequence.</p>
+<hr>
+<h3 id="p9--rtb-returns">P9 — RTB Returns</h3>
+<p>Inbound Excel-based integration processed within the Business Central client. A warehouse operator uploads an RTB (Return To Base) Excel file via the <strong>Sales Return Order List</strong> action; the app parses, validates, and creates Sales Return Orders (SROs). There are no direct API calls for this area — the upload is handled through the BC UI.</p>
+<p><strong>Flow</strong>:</p>
+<pre><code>Action: &quot;Import RTB Returns&quot;  →  Upload Excel file stream
+  →  PCGRTBExcelParser.ParseFile()  →  populates PCG RTB Import Line (temp table)
+  →  PCGRTBManifestVal.ValidateLines()
+  →  Show PCG RTB Import Preview (PAG50168)  →  operator reviews / blocks rows
+  →  PCGRTBSROManager.ProcessImportLines()
+      →  Group by Load Reference
+      →  CreateSROForLoadRef()  →  CreateSROLine()
+          →  PCGRTBItemResolver.ResolveItemNo()
+              (tries: Vendor Reference → Item No. 2 → Barcode)
+</code></pre>
+<p><strong>RTB Condition Enum</strong> (50052):</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Caption</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><em>(blank)</em></td>
+</tr>
+<tr>
+<td>1</td>
+<td>New</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Used</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sales Line extensions</strong> added for RTB lines:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RTB Condition TMA2B9</td>
+<td>Enum RTBCondition</td>
+</tr>
+<tr>
+<td>RTB Routing Code TMA2B9</td>
+<td>Code</td>
+</tr>
+<tr>
+<td>Original Case No. TMA2B9</td>
+<td>Text</td>
+</tr>
+<tr>
+<td>Original Customer Postcode TMA2B9</td>
+<td>Code</td>
+</tr>
+<tr>
+<td>RTB Tracking No. TMA2B9</td>
+<td>Code</td>
+</tr>
+</tbody>
+</table>
+<p>RTB-specific fields are readable via the <code>salesReturnLines</code> (PAG50232) sub-page:</p>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rtbCondition</code></td>
+<td>RTB Condition (<code>New</code> or <code>Used</code>)</td>
+<td>Option</td>
+</tr>
+<tr>
+<td><code>rtbRoutingCode</code></td>
+<td>RTB Routing Code</td>
+<td>Code</td>
+</tr>
+<tr>
+<td><code>originalCaseNo</code></td>
+<td>Original Case No.</td>
+<td>Text</td>
+</tr>
+<tr>
+<td><code>origCustomerPostcode</code></td>
+<td>Original Customer Postcode</td>
+<td>Code</td>
+</tr>
+<tr>
+<td><code>rtbTrackingNo</code></td>
+<td>RTB Tracking No.</td>
+<td>Code</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="p10--purchase-order">P10 — Purchase Order</h3>
+<p><strong>Outbound</strong> — When a Purchase Order is released in Business Central, the system automatically builds a JSON payload and sends it to the configured PCG endpoint. No inbound API call is required for this direction. See <a href="#p10-purchase-order-export">Outbound JSON Payloads — P10 Purchase Order Export</a> for the full structure.</p>
+<p><strong>Outbound flow</strong>:</p>
+<pre><code>Purchase Order Released  →  OnAfterReleasePurchaseDoc (event)
+  →  POReleaseMgt.CreateOutboundEntityChange()
+      →  POJSONBuilder.BuildPurchaseOrderJSON()
+      →  POExportCodeunitAPI.OnRun()  (TableNo = Int. Entity Interface TMXIF)
+</code></pre>
+<p><strong>Inbound (CSV Import)</strong> — Operators can import Purchase Orders from a CSV file via the <code>PCG Purchase Import</code> list page (PAG50183).</p>
+<p><strong>Inbound CSV Import flow</strong>:</p>
+<pre><code>Action: Import CSV  →  stream
+  →  PCGPurchaseImportMgt.ImportFromStream()  →  Purchase Import Buffer (temp)
+  →  POImportValidation.ValidateBuffer()
+  →  POImportCreate.CreatePurchaseOrders()
+</code></pre>
+<p><strong>Purchase Import Buffer fields</strong> (TAB50182):</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entry No.</td>
+<td>Integer</td>
+<td>Key</td>
+</tr>
+<tr>
+<td>Order Number</td>
+<td>Code</td>
+<td></td>
+</tr>
+<tr>
+<td>Order Date</td>
+<td>Date</td>
+<td></td>
+</tr>
+<tr>
+<td>Supplier Code</td>
+<td>Code[20]</td>
+<td>Validated against Vendor</td>
+</tr>
+<tr>
+<td>Buyer Code</td>
+<td>Code[20]</td>
+<td></td>
+</tr>
+<tr>
+<td>Order Type</td>
+<td>Code</td>
+<td></td>
+</tr>
+<tr>
+<td>Required By Date</td>
+<td>Date</td>
+<td></td>
+</tr>
+<tr>
+<td>Destination Warehouse</td>
+<td>Code</td>
+<td>Validated against Location</td>
+</tr>
+<tr>
+<td>Part</td>
+<td>Code[20]</td>
+<td>Validated against Item</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>Text</td>
+<td></td>
+</tr>
+<tr>
+<td>Quantity Ordered</td>
+<td>Decimal</td>
+<td></td>
+</tr>
+<tr>
+<td>Supplier Quantity</td>
+<td>Decimal</td>
+<td></td>
+</tr>
+<tr>
+<td>Container Type</td>
+<td>Code</td>
+<td></td>
+</tr>
+<tr>
+<td>Import Status</td>
+<td>Option</td>
+<td>Blank / Error</td>
+</tr>
+<tr>
+<td>Error Message</td>
+<td>Text</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Inbound (read)</strong> — The <code>purchaseOrders</code> and <code>purchaseOrderLines</code> endpoints are available read-only for PCG to query purchase order status.</p>
+<hr>
+<h3 id="sales-return-orders">Sales Return Orders</h3>
+<p>Two API endpoint pairs are available for reading and writing Sales Return Orders:</p>
+<table>
+<thead>
+<tr>
+<th>Pair</th>
+<th>Header page</th>
+<th>Lines sub-page</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full</td>
+<td><code>salesReturnOrders</code> (PAG50231)</td>
+<td><code>salesReturnLines</code> (PAG50232)</td>
+<td>Creating or reading return orders where full standard address and header fields are needed</td>
+</tr>
+<tr>
+<td>Slim</td>
+<td><code>salesReturnOrdersExt</code> (PAG50233)</td>
+<td><code>salesReturnLinesExt</code> (PAG50234)</td>
+<td>Patching only PCG-specific custom fields on an existing return order</td>
+</tr>
+</tbody>
+</table>
+<p>Both pairs support GET, POST, and PATCH. <code>salesReturnOrders</code> additionally supports DELETE.</p>
+<p>See <a href="#field-reference-by-endpoint">Field Reference by Endpoint</a> for complete field lists:</p>
+<ul>
+<li><a href="#salesreturnorders-pag50231">Full header fields (PAG50231)</a></li>
+<li><a href="#salesreturnlines-pag50232--sub-page-of-salesreturnorders">Full line fields (PAG50232)</a></li>
+<li><a href="#salesreturnordersext-pag50233">Slim header fields (PAG50233)</a></li>
+<li><a href="#salesreturnlinesext-pag50234--sub-page-of-salesreturnordersext">Slim line fields (PAG50234)</a></li>
+</ul>
+<hr>
+<h2 id="outbound-json-payloads">Outbound JSON Payloads</h2>
+<h3 id="p6-sales-order-line-dispatch">P6 Sales Order Line Dispatch</h3>
+<p>Sent automatically when a Sales Shipment is posted. The payload is a <strong>JSON array</strong> — one flat object per shipment line, with header fields repeated on each entry.</p>
+<p><strong>Data Source</strong>: All fields are populated from the Sales Shipment Header, Sales Shipment Lines, and the related Sales Order. The mapping of each JSON property to its source BC table/field is documented in the Field Reference table below.</p>
+<pre><code class="lang-json">[
+  {
+    &quot;shipmentNumber&quot;: &quot;string&quot;,
+    &quot;salesOrderNumber&quot;: &quot;string&quot;,
+    &quot;customerNumber&quot;: &quot;string&quot;,
+    &quot;customerName&quot;: &quot;string&quot;,
+    &quot;shipToName&quot;: &quot;string&quot;,
+    &quot;shipToAddress&quot;: &quot;string&quot;,
+    &quot;shipToAddress2&quot;: &quot;string&quot;,
+    &quot;shipToCity&quot;: &quot;string&quot;,
+    &quot;shipToPostCode&quot;: &quot;string&quot;,
+    &quot;shipToCountryCode&quot;: &quot;string&quot;,
+    &quot;shipmentDate&quot;: &quot;2026-04-27&quot;,
+    &quot;shippingAgent&quot;: &quot;string&quot;,
+    &quot;trackingNumber&quot;: &quot;string&quot;,
+    &quot;externalRetailerName&quot;: &quot;string&quot;,
+    &quot;salesLineItemSequenceNumber&quot;: &quot;string&quot;,
+    &quot;lineObjectNumber&quot;: &quot;string&quot;,
+    &quot;lineObjectNumber2&quot;: &quot;string&quot;,
+    &quot;lineObjectCustomerReference&quot;: &quot;string&quot;,
+    &quot;lineObjectDescription&quot;: &quot;string&quot;,
+    &quot;quantity&quot;: 0,
+    &quot;externalDocumentNumber&quot;: &quot;string&quot;,
+    &quot;vehicleRegistration&quot;: &quot;string&quot;,
+    &quot;dropNumber&quot;: &quot;string&quot;,
+    &quot;miscReference1&quot;: &quot;string&quot;,
+    &quot;miscReference2&quot;: &quot;string&quot;,
+    &quot;miscReference3&quot;: &quot;string&quot;,
+    &quot;miscellaneousLineReference1&quot;: &quot;string&quot;,
+    &quot;pcgUniqueLineReference&quot;: &quot;string&quot;
+  }
+]
+</code></pre>
+<blockquote>
+<p><code>dropNumber</code> is only included when it has a value.</p>
+</blockquote>
+<p><strong>Field Reference</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Source Table</th>
+<th>Source Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>shipmentNumber</code></td>
+<td>Sales Shipment Header</td>
+<td>No.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>salesOrderNumber</code></td>
+<td>Sales Header</td>
+<td>No.</td>
+<td>From the related Sales Order</td>
+</tr>
+<tr>
+<td><code>customerNumber</code></td>
+<td>Sales Shipment Header</td>
+<td>Sell-to Customer No.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>customerName</code></td>
+<td>Customer</td>
+<td>Name</td>
+<td>Resolved from Sell-to Customer No.</td>
+</tr>
+<tr>
+<td><code>shipToName</code></td>
+<td>Sales Shipment Header</td>
+<td>Ship-to Name</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToAddress</code></td>
+<td>Sales Shipment Header</td>
+<td>Ship-to Address</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToAddress2</code></td>
+<td>Sales Shipment Header</td>
+<td>Ship-to Address 2</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToCity</code></td>
+<td>Sales Shipment Header</td>
+<td>Ship-to City</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToPostCode</code></td>
+<td>Sales Shipment Header</td>
+<td>Ship-to Post Code</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipToCountryCode</code></td>
+<td>Sales Shipment Header</td>
+<td>Ship-to Country/Region Code</td>
+<td></td>
+</tr>
+<tr>
+<td><code>shipmentDate</code></td>
+<td>Sales Shipment Header</td>
+<td>Shipment Date</td>
+<td>ISO 8601: <code>yyyy-MM-dd</code></td>
+</tr>
+<tr>
+<td><code>shippingAgent</code></td>
+<td>Sales Shipment Header</td>
+<td>Shipping Agent Code</td>
+<td></td>
+</tr>
+<tr>
+<td><code>trackingNumber</code></td>
+<td>Sales Shipment Header</td>
+<td>Package Tracking No.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>externalRetailerName</code></td>
+<td>Sales Header</td>
+<td>External Retailer Name</td>
+<td>Sourced from open Sales Order if available</td>
+</tr>
+<tr>
+<td><code>salesLineItemSequenceNumber</code></td>
+<td>Sales Shipment Line</td>
+<td>Line No.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>lineObjectNumber</code></td>
+<td>Sales Shipment Line</td>
+<td>Item No.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>lineObjectNumber2</code></td>
+<td>Item</td>
+<td>No. 2</td>
+<td>SKU / Model No.</td>
+</tr>
+<tr>
+<td><code>lineObjectCustomerReference</code></td>
+<td>Item Reference</td>
+<td>Reference No.</td>
+<td>Customer cross-reference</td>
+</tr>
+<tr>
+<td><code>lineObjectDescription</code></td>
+<td>Sales Shipment Line</td>
+<td>Description</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>Sales Shipment Line</td>
+<td>Quantity</td>
+<td>Quantity shipped</td>
+</tr>
+<tr>
+<td><code>externalDocumentNumber</code></td>
+<td>Sales Header</td>
+<td>External Document No.</td>
+<td>Customer PO reference</td>
+</tr>
+<tr>
+<td><code>vehicleRegistration</code></td>
+<td>Sales Shipment Line</td>
+<td>Vehicle Registration</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dropNumber</code></td>
+<td>Sales Shipment Line</td>
+<td>Drop Number</td>
+<td>Omitted if blank</td>
+</tr>
+<tr>
+<td><code>miscReference1</code></td>
+<td>Sales Header</td>
+<td>Miscellaneous Reference 1</td>
+<td>Header-level</td>
+</tr>
+<tr>
+<td><code>miscReference2</code></td>
+<td>Sales Header</td>
+<td>Miscellaneous Reference 2</td>
+<td>Header-level</td>
+</tr>
+<tr>
+<td><code>miscReference3</code></td>
+<td>Sales Header</td>
+<td>Miscellaneous Reference 3</td>
+<td>Header-level</td>
+</tr>
+<tr>
+<td><code>miscellaneousLineReference1</code></td>
+<td>Sales Shipment Line</td>
+<td>Miscellaneous Line Reference 1</td>
+<td>Line-level</td>
+</tr>
+<tr>
+<td><code>pcgUniqueLineReference</code></td>
+<td>Sales Shipment Line</td>
+<td>PCG Unique Line Reference</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="p10-purchase-order-export">P10 Purchase Order Export</h3>
+<p>Sent automatically when a Purchase Order is released. The payload is a single JSON object.</p>
+<blockquote>
+<p><strong>Note:</strong> The <code>orderNumber</code> field in the outbound payload maps to <code>Purchase Header.&quot;Vendor Order No.&quot;</code> (the supplier's order reference), <strong>not</strong> <code>Purchase Header.&quot;No.&quot;</code> (the internal BC number). This differs from the <code>purchaseOrders</code> API endpoint (PAG50087) where <code>orderNumber</code> maps to <code>Purchase Header.&quot;No.&quot;</code>.</p>
+</blockquote>
+<p><strong>Data Source</strong>: Header fields are populated from the Purchase Header table. Line fields and item tracking information are populated from the Purchase Line and Item Tracking tables. The mapping of each JSON property to its source BC table/field is documented in the Field Reference tables below.</p>
+<pre><code class="lang-json">{
+  &quot;orderNumber&quot;: &quot;string&quot;,
+  &quot;orderDate&quot;: &quot;2026-04-27T00:00:00&quot;,
+  &quot;supplierCode&quot;: &quot;string&quot;,
+  &quot;requiredByDate&quot;: &quot;2026-04-27T00:00:00&quot;,
+  &quot;destinationWarehouse&quot;: &quot;string&quot;,
+  &quot;containerType&quot;: &quot;string&quot;,
+  &quot;status&quot;: &quot;string&quot;,
+  &quot;currencyCode&quot;: &quot;string&quot;,
+  &quot;lines&quot;: [
+    {
+      &quot;itemNo&quot;: &quot;string&quot;,
+      &quot;description&quot;: &quot;string&quot;,
+      &quot;quantityOrdered&quot;: 0,
+      &quot;directUnitCost&quot;: 0,
+      &quot;quantityReceived&quot;: 0,
+      &quot;quantityInvoiced&quot;: 0,
+      &quot;serialNumbers&quot;: [
+        {
+          &quot;serialNo&quot;: &quot;string&quot;,
+          &quot;quantity&quot;: 0
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
+<blockquote>
+<p><code>serialNumbers</code> is only included on lines where the item has item tracking enabled.</p>
+</blockquote>
+<p><strong>Header Field Reference</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Source Table</th>
+<th>Source Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orderNumber</code></td>
+<td>Purchase Header</td>
+<td>Vendor Order No.</td>
+<td>Supplier's order reference</td>
+</tr>
+<tr>
+<td><code>orderDate</code></td>
+<td>Purchase Header</td>
+<td>Order Date</td>
+<td>ISO 8601 with time</td>
+</tr>
+<tr>
+<td><code>supplierCode</code></td>
+<td>Purchase Header</td>
+<td>Buy-from Vendor No.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>requiredByDate</code></td>
+<td>Purchase Header</td>
+<td>Expected Receipt Date</td>
+<td>ISO 8601 with time</td>
+</tr>
+<tr>
+<td><code>destinationWarehouse</code></td>
+<td>Purchase Header</td>
+<td>Location Code</td>
+<td></td>
+</tr>
+<tr>
+<td><code>containerType</code></td>
+<td>Purchase Header</td>
+<td>Container Type TM9FA3</td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Purchase Header</td>
+<td>Status</td>
+<td>Text value e.g. <code>Released</code></td>
+</tr>
+<tr>
+<td><code>currencyCode</code></td>
+<td>Purchase Header</td>
+<td>Currency Code</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Line Field Reference</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>JSON Property</th>
+<th>Source Table</th>
+<th>Source Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>itemNo</code></td>
+<td>Purchase Line</td>
+<td>No.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Purchase Line</td>
+<td>Description</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quantityOrdered</code></td>
+<td>Purchase Line</td>
+<td>Quantity</td>
+<td></td>
+</tr>
+<tr>
+<td><code>directUnitCost</code></td>
+<td>Purchase Line</td>
+<td>Direct Unit Cost</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quantityReceived</code></td>
+<td>Purchase Line</td>
+<td>Quantity Received</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quantityInvoiced</code></td>
+<td>Purchase Line</td>
+<td>Quantity Invoiced</td>
+<td></td>
+</tr>
+<tr>
+<td><code>serialNo</code></td>
+<td>Item Tracking</td>
+<td>Serial No.</td>
+<td>Only included when item has tracking enabled</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>Item Tracking</td>
+<td>Quantity</td>
+<td>Only included when item has tracking enabled</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note</strong>: <code>orderType</code> is mapped in the JSON builder but currently commented out pending availability of dependency symbols (<code>TM9FA3</code> field).</p>
+</blockquote>
+<hr>
+<h2 id="permission-set">Permission Set</h2>
+<p><strong>Permission Set 50048 — <code>PCGAPIPerm TMA2B9</code></strong> (Assignable: Yes)</p>
+<p>Grants <code>RIMD</code> (Read, Insert, Modify, Delete) on all app objects. Assign this permission set to any service or integration user account that needs to call the PCG API endpoints.</p>
+<hr>
+<h2 id="data-model">Data Model</h2>
+<h3 id="custom-tables">Custom Tables</h3>
+<table>
+<thead>
+<tr>
+<th>Table #</th>
+<th>Name</th>
+<th>Type</th>
+<th>Primary Key</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50048</td>
+<td>PO Cancel Request TMA2B9</td>
+<td>Permanent</td>
+<td>Entry No. (Integer)</td>
+<td>Staging: inbound PO cancellation header</td>
+</tr>
+<tr>
+<td>50049</td>
+<td>PO Cancel Req. Line TMA2B9</td>
+<td>Permanent</td>
+<td>Entry No., Line No.</td>
+<td>Staging: inbound PO cancellation lines</td>
+</tr>
+<tr>
+<td>50050</td>
+<td>Sales Cancel Request TMA2B9</td>
+<td>Permanent</td>
+<td>Entry No. (Integer)</td>
+<td>Staging: inbound Sales cancellation header</td>
+</tr>
+<tr>
+<td>50051</td>
+<td>Sales Cancel Req. Line TMA2B9</td>
+<td>Permanent</td>
+<td>Entry No., Line No.</td>
+<td>Staging: inbound Sales cancellation lines</td>
+</tr>
+<tr>
+<td>50162</td>
+<td>PCG Setup TMA2B9</td>
+<td>Permanent</td>
+<td>Primary Key (Code[10])</td>
+<td>App configuration singleton</td>
+</tr>
+<tr>
+<td>50164</td>
+<td>Palletised Load Buffer TMA2B9</td>
+<td>Temporary</td>
+<td>Entry No.</td>
+<td>Processing buffer for pallet load API</td>
+</tr>
+<tr>
+<td>50167</td>
+<td>PCG RTB Import Line TMA2B9</td>
+<td>Temporary</td>
+<td>Entry No.</td>
+<td>Staging: parsed RTB Excel rows</td>
+</tr>
+<tr>
+<td>50182</td>
+<td>Purchase Import Buffer TMA2B9</td>
+<td>Temporary</td>
+<td>Entry No.</td>
+<td>Staging: parsed CSV purchase import rows</td>
+</tr>
+</tbody>
+</table>
+<h3 id="table-extensions">Table Extensions</h3>
+<table>
+<thead>
+<tr>
+<th>Extension #</th>
+<th>Extended Table</th>
+<th>Extended Table #</th>
+<th>New Fields Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EXT50051</td>
+<td>Int. Connector TMXIF</td>
+<td>51910</td>
+<td>PCG API Version, OAuth Token Endpoint</td>
+</tr>
+<tr>
+<td>EXT50048</td>
+<td>Sales Line</td>
+<td>37</td>
+<td>Serial No., Cancellation Date, Cancellation Reason, Cancel Parent Ref</td>
+</tr>
+<tr>
+<td>EXT50049</td>
+<td>Sales Header</td>
+<td>36</td>
+<td>Cancellation Type, Cancellation Response</td>
+</tr>
+<tr>
+<td>EXT50050</td>
+<td>Purchase Line</td>
+<td>39</td>
+<td>Cancellation Date, Cancellation Reason</td>
+</tr>
+<tr>
+<td>EXT50052</td>
+<td>Sales Line (RTB)</td>
+<td>37</td>
+<td>RTB Condition, RTB Routing Code, Original Case No., Original Customer Postcode, RTB Tracking No.</td>
+</tr>
+<tr>
+<td>EXT50212</td>
+<td>Sales Line (Item Data)</td>
+<td>37</td>
+<td>Height TMA2B9, Width TMA2B9, Depth TMA2B9, Commodity Code TMA2B9</td>
+</tr>
+<tr>
+<td>EXT50211</td>
+<td>Purchase Header</td>
+<td>38</td>
+<td>Cancellation Type</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note</strong>: Freight fields on Warehouse Receipt Header (7316) — <code>Last Free Date</code>, <code>Container Number</code>, <code>Vessel Name</code>, <code>Inbound Booking Date/Time</code>, <code>Freight Forwarder</code>, <code>Port of Discharge</code>, <code>Port of Loading</code> — are provided by the <code>PCG Config</code> dependency app (publisher: Technology Management, id: <code>14a38d9c-69ef-4c65-bc46-b5d449e1fd68</code>).</p>
+</blockquote>
+<hr>
+<h2 id="internal-components">Internal Components</h2>
+<h3 id="codeunits">Codeunits</h3>
+<table>
+<thead>
+<tr>
+<th>Codeunit #</th>
+<th>Name</th>
+<th>Area</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50048</td>
+<td>Sales Order Cancel Mgt TMA2B9</td>
+<td>P5</td>
+<td>Orchestrates Sales Order cancellation/modification</td>
+</tr>
+<tr>
+<td>50049</td>
+<td>Sales Cancel Response TMA2B9</td>
+<td>P5</td>
+<td>Builds success/error JSON response for Sales cancellation</td>
+</tr>
+<tr>
+<td>50050</td>
+<td>TMXIF Event Handler TMA2B9</td>
+<td>Common</td>
+<td>Implements TMXIF connection type interface (PCG)</td>
+</tr>
+<tr>
+<td>50051</td>
+<td>PCG RTB Excel Parser TMA2B9</td>
+<td>P9</td>
+<td>Parses RTB Excel upload into import buffer</td>
+</tr>
+<tr>
+<td>50052</td>
+<td>PCG RTB Manifest Val. TMA2B9</td>
+<td>P9</td>
+<td>Validates parsed RTB import lines</td>
+</tr>
+<tr>
+<td>50085</td>
+<td>PCG RTB Item Resolver TMA2B9</td>
+<td>P9</td>
+<td>Resolves item by vendor ref / Item No. 2 / barcode</td>
+</tr>
+<tr>
+<td>50086</td>
+<td>Whse. Receipt Lookup TMA2B9</td>
+<td>P8</td>
+<td>Finds or creates Warehouse Receipt for a document</td>
+</tr>
+<tr>
+<td>50087</td>
+<td>Cancel Line Buffer TMA2B9</td>
+<td>P5</td>
+<td>SingleInstance buffer: Sales cancellation lines</td>
+</tr>
+<tr>
+<td>50162</td>
+<td>PCG RTB SRO Manager TMA2B9</td>
+<td>P9</td>
+<td>Creates Sales Return Orders from RTB import lines</td>
+</tr>
+<tr>
+<td>50163</td>
+<td>Manifest JSON Builder TMA2B9</td>
+<td>P6</td>
+<td>Builds dispatch confirmation JSON from posted Sales Shipment</td>
+</tr>
+<tr>
+<td>50164</td>
+<td>Manifest Event Handler TMA2B9</td>
+<td>P6</td>
+<td>Test helper: builds dispatch confirmation JSON for test verification (no event subscribers)</td>
+</tr>
+<tr>
+<td>50165</td>
+<td>PCG Rest Client TMA2B9</td>
+<td>Common</td>
+<td>REST HTTP client with OAuth2 authentication</td>
+</tr>
+<tr>
+<td>50166</td>
+<td>SalesLine Item Data Mgt TMA2B9</td>
+<td>Common</td>
+<td>Event subscriber: resolves customer item references on APIV2 Sales Order Lines; auto-populates Height, Width, Depth, and Commodity Code on Sales Line validation</td>
+</tr>
+<tr>
+<td>50167</td>
+<td>Http Client Handler API TMA2B9</td>
+<td>Common</td>
+<td>Mockable HTTP client handler (test injection point)</td>
+</tr>
+<tr>
+<td>50168</td>
+<td>PO Release Mgt TMA2B9</td>
+<td>P10</td>
+<td>Event subscriber: triggers PO export on release</td>
+</tr>
+<tr>
+<td>50169</td>
+<td>PO JSON Builder TMA2B9</td>
+<td>P10</td>
+<td>Builds Purchase Order JSON for outbound export</td>
+</tr>
+<tr>
+<td>50181</td>
+<td>PCG Purchase Import Mgt TMA2B9</td>
+<td>P10</td>
+<td>Parses CSV stream into Purchase Import Buffer</td>
+</tr>
+<tr>
+<td>50182</td>
+<td>PO Cancel Line Buf TMA2B9</td>
+<td>P5</td>
+<td>SingleInstance buffer: PO cancellation lines</td>
+</tr>
+<tr>
+<td>50183</td>
+<td>PO Cancel Mgt TMA2B9</td>
+<td>P5</td>
+<td>Orchestrates Purchase Order cancellation/modification</td>
+</tr>
+<tr>
+<td>50184</td>
+<td>PO Import Validation TMA2B9</td>
+<td>P10</td>
+<td>Validates Purchase Import Buffer rows</td>
+</tr>
+<tr>
+<td>50185</td>
+<td>PO Import Create TMA2B9</td>
+<td>P10</td>
+<td>Creates Purchase Orders from validated import buffer</td>
+</tr>
+<tr>
+<td>50186</td>
+<td>PO Export Codeunit API TMA2B9</td>
+<td>P10</td>
+<td>TMXIF export runner for Purchase Order outbound flow</td>
+</tr>
+<tr>
+<td>50211</td>
+<td>PCGPalletLoadAPIHandler TMA2B9</td>
+<td>P7</td>
+<td>Orchestrates palletised load API processing</td>
+</tr>
+<tr>
+<td>50212</td>
+<td>PCG Whse.Shpmt. Builder TMA2B9</td>
+<td>P7</td>
+<td>Creates Warehouse Shipment headers and lines</td>
+</tr>
+<tr>
+<td>50213</td>
+<td>PCGPalletisedLineProces TMA2B9</td>
+<td>P7</td>
+<td>Processes individual pallet load lines</td>
+</tr>
+<tr>
+<td>50229</td>
+<td>PO Cancel Response TMA2B9</td>
+<td>P5</td>
+<td>Builds success/error JSON response for PO cancellation</td>
+</tr>
+<tr>
+<td>50230</td>
+<td>Disp.Conf. Outbound Mgt TMA2B9</td>
+<td>P6</td>
+<td>Event subscriber: creates Outbound Entity Change on Sales Shipment posting</td>
+</tr>
+<tr>
+<td>50231</td>
+<td>Disp.Conf. Export API TMA2B9</td>
+<td>P6</td>
+<td>TMXIF export runner for dispatch confirmation outbound flow</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="dependencies">Dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Publisher</th>
+<th>App Name</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Technology Management</td>
+<td>Tecman X-Integration Framework Core</td>
+<td>≥ 18.1.0.0</td>
+<td>TMXIF connector and export interface base</td>
+</tr>
+<tr>
+<td>Technology Management</td>
+<td>PCG Config</td>
+<td>≥ 27.3.0.0</td>
+<td>Freight table extensions on Warehouse Receipt Header</td>
+</tr>
+<tr>
+<td>Clever Dynamics</td>
+<td>Clever Config</td>
+<td>≥ 1.15.1</td>
+<td>Configuration framework</td>
+</tr>
+<tr>
+<td>Clever Dynamics</td>
+<td>Clever Trade Plus</td>
+<td>≥ 2.0.5</td>
+<td>Trade extensions used by Sales/Item fields</td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td>Sustainability</td>
+<td>≥ 27.3.0.0</td>
+<td>Standard BC sustainability module</td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td>Subscription &amp; Recurring Billing</td>
+<td>≥ 27.0.0.0</td>
+<td>Standard BC subscription billing module</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/timeastman/rr_documentation/blob/styling/docs/product-care/api/pcg-api-integration-guide.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

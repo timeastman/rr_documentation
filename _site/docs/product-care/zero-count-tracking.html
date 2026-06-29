@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Zero Count Tracking - User Guide | Reboot Revolution Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Zero Count Tracking - User Guide | Reboot Revolution Documentation ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/timeastman/rr_documentation/blob/styling/docs/product-care/zero-count-tracking.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Reboot Revolution Documentation">
+            Reboot Revolution Documentation
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="zero-count-tracking-user-guide">
+<h1 id="zero-count-tracking---user-guide">Zero Count Tracking - User Guide</h1>
+
+<p><strong>Version</strong>: 27.3.0.0<br>
+<strong>Publisher</strong>: Technology Management<br>
+<strong>Application</strong>: Business Central WMS Device Enhancement<br>
+<strong>Last Updated</strong>: February 2026</p>
+<hr>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#system-setup">System Setup</a></li>
+<li><a href="#main-features">Main Features</a></li>
+<li><a href="#working-with-empty-bin-checks">Working with Empty Bin Checks</a></li>
+<li><a href="#using-the-handheld-device">Using the Handheld Device</a></li>
+<li><a href="#reporting-and-monitoring">Reporting and Monitoring</a></li>
+<li><a href="#bin-blocking-and-investigation">Bin Blocking and Investigation</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ol>
+<hr>
+<h2 id="overview">Overview</h2>
+<h3 id="purpose">Purpose</h3>
+<p>The Zero Count Tracking app enables warehouse managers to accurately track, confirm, and audit empty bins within your Business Central environment. This ensures reliable inventory data for reporting in Power BI and Business Central by systematically logging empty bin confirmations and identifying discrepancies that require investigation.</p>
+<h3 id="key-benefits">Key Benefits</h3>
+<ul>
+<li><strong>Accurate Inventory Visibility</strong>: Confirm empty bins to ensure reliable stock data</li>
+<li><strong>Audit Trail</strong>: Complete ledger of all empty bin confirmations with timestamps</li>
+<li><strong>Exception Management</strong>: Flag bins requiring investigation and automatically block them</li>
+<li><strong>WMS Integration</strong>: Seamlessly integrated with handheld devices for warehouse operations</li>
+<li><strong>Flexible Filtering</strong>: Location and zone-specific functionality with exclusion options</li>
+</ul>
+<h3 id="target-users">Target Users</h3>
+<ul>
+<li>Warehouse Managers</li>
+<li>Warehouse Operatives</li>
+<li>Stock Controllers</li>
+<li>Inventory Analysts</li>
+</ul>
+<hr>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Business Central version 27.3 or higher</li>
+<li>Clever Device Framework (version 8.0.2 or higher)</li>
+<li>Clever WMS Devices (version 8.0.3 or higher)</li>
+<li>Appropriate user permissions for warehouse management</li>
+<li>Access to handheld WMS devices (for mobile operations)</li>
+</ul>
+<h3 id="required-permissions">Required Permissions</h3>
+<p>The Zero Count Tracking permission set provides access to:</p>
+<ul>
+<li>Empty Bin Check Journal</li>
+<li>Empty Bin Check Ledger</li>
+<li>Empty Bin Check configuration settings</li>
+<li>Bin blocking functionality</li>
+<li>Related reports and statistics</li>
+</ul>
+<h3 id="accessing-the-application">Accessing the Application</h3>
+<ol>
+<li><p><strong>From the Role Center</strong>:</p>
+<ul>
+<li>Navigate to <strong>Tasks</strong> → <strong>Empty Bin Check List</strong></li>
+</ul>
+</li>
+<li><p><strong>From Inventory Setup</strong>:</p>
+<ul>
+<li>Search for <strong>Inventory Setup</strong></li>
+<li>Navigate to <strong>Empty Check Administration</strong> → <strong>Empty Bin Check Journal</strong></li>
+</ul>
+</li>
+<li><p><strong>From Bin List</strong>:</p>
+<ul>
+<li>Open any bin list page</li>
+<li>Use the <strong>Empty Bin Check</strong> action in the ribbon</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="system-setup">System Setup</h2>
+<h3 id="initial-configuration">Initial Configuration</h3>
+<p>Before using the Zero Count Tracking features, configure the system through the Inventory Setup page.</p>
+<h4 id="step-1-open-inventory-setup">Step 1: Open Inventory Setup</h4>
+<ol>
+<li>Search for <strong>Inventory Setup</strong> in Business Central</li>
+<li>Scroll down to the <strong>Empty Bin Check</strong> section</li>
+</ol>
+<h4 id="step-2-enable-empty-bin-check">Step 2: Enable Empty Bin Check</h4>
+<p>Configure the following settings:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Description</th>
+<th>Recommended Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Empty Check Enabled</strong></td>
+<td>Master switch to enable/disable the feature</td>
+<td>✓ Enabled</td>
+</tr>
+<tr>
+<td><strong>Excluded Locations</strong></td>
+<td>Filter of location codes to exclude (e.g., Quality, 3PL locations)</td>
+<td>Set as per business requirements</td>
+</tr>
+<tr>
+<td><strong>Auto-Block on Check Required</strong></td>
+<td>Automatically block bins when flagged for investigation</td>
+<td>✓ Enabled (recommended)</td>
+</tr>
+<tr>
+<td><strong>Empty Check Batch Name</strong></td>
+<td>Default batch name for Physical Inventory Journal integration</td>
+<td>&quot;EMPTY&quot;</td>
+</tr>
+<tr>
+<td><strong>Default Reason Code</strong></td>
+<td>Reason code for empty bin transactions</td>
+<td>Create specific code (e.g., &quot;EMPTYBIN&quot;)</td>
+</tr>
+<tr>
+<td><strong>Enforce Comment</strong></td>
+<td>Require comments on all empty bin check transactions</td>
+<td>✓ Enabled (for audit purposes)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="step-3-configure-excluded-locations">Step 3: Configure Excluded Locations</h4>
+<p>To exclude specific locations (e.g., Quality Control, 3PL locations):</p>
+<ol>
+<li>In <strong>Excluded Locations Empty Check</strong> field, enter location filter</li>
+<li>Use standard filter syntax:
+<ul>
+<li>Single location: <code>QUAL</code></li>
+<li>Multiple locations: <code>QUAL|3PL|TEMP</code></li>
+<li>Pattern matching: <code>QC*</code> (excludes all locations starting with QC)</li>
+</ul>
+</li>
+<li>Use the <strong>Assist Edit</strong> button (three dots) to select from location list</li>
+</ol>
+<h4 id="step-4-set-up-reason-codes-optional">Step 4: Set Up Reason Codes (Optional)</h4>
+<ol>
+<li>Navigate to <strong>Reason Codes</strong></li>
+<li>Create specific codes for empty bin operations:
+<ul>
+<li><code>EMPTYBIN</code> - Standard empty bin confirmation</li>
+<li><code>EMPTYDISC</code> - Empty bin discrepancy</li>
+<li><code>STOCKFOUND</code> - Stock found in supposedly empty bin</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="main-features">Main Features</h2>
+<h3 id="1-empty-bin-check-journal">1. Empty Bin Check Journal</h3>
+<p>The journal is your primary workspace for managing empty bin checks.</p>
+<p><strong>Key Functions</strong>:</p>
+<ul>
+<li>Generate list of empty bins</li>
+<li>Confirm bins are empty</li>
+<li>Flag bins for investigation</li>
+<li>Add comments and reason codes</li>
+<li>Post confirmations to ledger</li>
+</ul>
+<h3 id="2-empty-bin-check-ledger">2. Empty Bin Check Ledger</h3>
+<p>Historical record of all posted empty bin confirmations.</p>
+<p><strong>Features</strong>:</p>
+<ul>
+<li>Complete audit trail with timestamps</li>
+<li>Filter by location, bin, user, or date</li>
+<li>View confirmation history for specific bins</li>
+<li>Export for external reporting</li>
+</ul>
+<h3 id="3-bin-blocking-integration">3. Bin Blocking Integration</h3>
+<p>Automatically blocks bins flagged for investigation within WMS.</p>
+<p><strong>Capabilities</strong>:</p>
+<ul>
+<li>Prevents warehouse operations on flagged bins</li>
+<li>Visible in bin lists and handheld devices</li>
+<li>Tracks who blocked bin and when</li>
+<li>Requires resolution before unblocking</li>
+</ul>
+<h3 id="4-handheld-device-integration">4. Handheld Device Integration</h3>
+<p>Full integration with WMS handheld devices for warehouse floor operations.</p>
+<hr>
+<h2 id="working-with-empty-bin-checks">Working with Empty Bin Checks</h2>
+<h3 id="creating-an-empty-bin-check-list">Creating an Empty Bin Check List</h3>
+<h4 id="step-1-open-the-journal">Step 1: Open the Journal</h4>
+<ol>
+<li>Navigate to <strong>Empty Bin Check List</strong> page</li>
+<li>The journal will be empty initially</li>
+</ol>
+<h4 id="step-2-get-empty-bins">Step 2: Get Empty Bins</h4>
+<ol>
+<li>Click <strong>Get Empty Bins</strong> action in the ribbon</li>
+<li>In the dialog, set filters:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Filter</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Location Code</strong></td>
+<td>Select location(s) to check</td>
+<td>MAIN</td>
+</tr>
+<tr>
+<td><strong>Zone Code</strong></td>
+<td>(Optional) Specific zone(s)</td>
+<td>BULK, PICK</td>
+</tr>
+<tr>
+<td><strong>Include Non-Empty Bins</strong></td>
+<td>Check bins with stock to clear them from system</td>
+<td>Leave unchecked normally</td>
+</tr>
+<tr>
+<td><strong>Bin Type Filter</strong></td>
+<td>Filter by bin type</td>
+<td>Leave blank for all types</td>
+</tr>
+</tbody>
+</table>
+<ol start="3">
+<li>Click <strong>OK</strong> to generate the list</li>
+<li>The journal populates with all empty bins matching your criteria</li>
+</ol>
+<h4 id="step-3-review-the-list">Step 3: Review the List</h4>
+<p>Review the generated lines:</p>
+<ul>
+<li><strong>Entry No.</strong>: Unique identifier for each line</li>
+<li><strong>Location Code</strong>: Where the bin is located</li>
+<li><strong>Bin Code</strong>: The specific bin identifier</li>
+<li><strong>User ID</strong>: Your user ID (auto-populated)</li>
+<li><strong>Action</strong>: Select appropriate action (initially blank)</li>
+<li><strong>Created Date Time</strong>: When the entry was created</li>
+<li><strong>Status</strong>: Pending (until posted)</li>
+<li><strong>Reason Code</strong>: Optional reason code</li>
+<li><strong>Comments</strong>: Add notes as required</li>
+</ul>
+<h3 id="confirming-empty-bins">Confirming Empty Bins</h3>
+<p>When you've verified a bin is truly empty:</p>
+<h4 id="method-1-individual-confirmation">Method 1: Individual Confirmation</h4>
+<ol>
+<li>Select the line for the bin</li>
+<li>In the <strong>Action</strong> field, select <strong>Confirm Empty</strong></li>
+<li>Add <strong>Comments</strong> if required (mandatory if enforced in setup)</li>
+<li>Set <strong>Reason Code</strong> if applicable</li>
+<li>Click <strong>Post</strong> action to post to ledger</li>
+</ol>
+<h4 id="method-2-bulk-confirmation">Method 2: Bulk Confirmation</h4>
+<ol>
+<li>Select multiple lines (Ctrl+Click or Shift+Click)</li>
+<li>Click <strong>Confirm Empty</strong> action in the ribbon</li>
+<li>All selected lines will have Action set to &quot;Confirm Empty&quot;</li>
+<li>Add comments on individual lines as needed</li>
+<li>Click <strong>Post</strong> to post all pending lines</li>
+</ol>
+<h3 id="flagging-bins-for-investigation">Flagging Bins for Investigation</h3>
+<p>When a bin should be empty but you suspect or find stock:</p>
+<ol>
+<li>Select the bin line</li>
+<li>In the <strong>Action</strong> field, select <strong>Check Required</strong></li>
+<li>Enter <strong>Reason Code</strong> (mandatory)</li>
+<li>Add detailed <strong>Comments</strong> explaining the issue</li>
+<li>The bin will be automatically blocked (if configured)</li>
+<li>Click <strong>Post</strong> to post to ledger</li>
+</ol>
+<p><strong>Note</strong>: Once marked as &quot;Check Required&quot;, the bin is blocked in WMS and cannot be used for warehouse operations until resolved.</p>
+<h3 id="posting-journal-entries">Posting Journal Entries</h3>
+<h4 id="post-all-pending">Post All Pending</h4>
+<ol>
+<li>Click <strong>Post</strong> action in the ribbon</li>
+<li>Confirm the posting action</li>
+<li>All lines with status &quot;Pending&quot; will be:
+<ul>
+<li>Posted to the Empty Bin Check Ledger</li>
+<li>Status updated to &quot;Posted&quot;</li>
+<li>Bin table updated with last check date and user</li>
+</ul>
+</li>
+</ol>
+<h4 id="post-selected-lines">Post Selected Lines</h4>
+<ol>
+<li>Select specific lines to post</li>
+<li>Click <strong>Post Selected</strong> action</li>
+<li>Only selected lines will be posted</li>
+</ol>
+<h4 id="view-posted-entries">View Posted Entries</h4>
+<ol>
+<li>After posting, click <strong>View Ledger</strong> action</li>
+<li>Navigate to the Empty Bin Check Ledger page</li>
+<li>Review posted entries with timestamps</li>
+</ol>
+<h3 id="clearing-the-journal">Clearing the Journal</h3>
+<p>To remove posted entries from the journal:</p>
+<ol>
+<li>Click <strong>Clear Posted Lines</strong> action</li>
+<li>Confirm the deletion</li>
+<li>Only lines with Status = &quot;Posted&quot; will be deleted</li>
+<li>Original ledger entries remain intact</li>
+</ol>
+<hr>
+<h2 id="using-the-handheld-device">Using the Handheld Device</h2>
+<h3 id="overview-1">Overview</h3>
+<p>Warehouse operatives can perform empty bin checks directly from handheld WMS devices during spot checks and stock takes.</p>
+<h3 id="accessing-empty-bin-function">Accessing Empty Bin Function</h3>
+<ol>
+<li><p>From the handheld device main menu:</p>
+<ul>
+<li>Navigate to <strong>Stock Take</strong> → <strong>Spot Check</strong></li>
+<li>Or select <strong>Empty Bin Check</strong> (depending on device configuration)</li>
+</ul>
+</li>
+<li><p>The device displays list of empty bins for your location</p>
+</li>
+</ol>
+<h3 id="confirming-empty-bins-on-device">Confirming Empty Bins on Device</h3>
+<h4 id="scanning-method">Scanning Method</h4>
+<ol>
+<li>Scan the bin barcode</li>
+<li>Device displays bin information</li>
+<li>Select <strong>Empty</strong> option</li>
+<li>Add comment if required (use voice-to-text or on-screen keyboard)</li>
+<li>Confirm action</li>
+<li>Updates sync immediately to Business Central</li>
+</ol>
+<h4 id="browse-method">Browse Method</h4>
+<ol>
+<li>Browse list of empty bins on device</li>
+<li>Select bin from list</li>
+<li>Choose <strong>Confirm Empty</strong></li>
+<li>Add comment if required</li>
+<li>Confirm action</li>
+</ol>
+<h3 id="flagging-for-investigation-on-device">Flagging for Investigation on Device</h3>
+<ol>
+<li>Scan or select the bin</li>
+<li>If stock is found:
+<ul>
+<li>Select <strong>Check Required</strong> option</li>
+<li>Select appropriate reason code</li>
+<li>Add detailed comment</li>
+<li>Device will show bin as blocked</li>
+</ul>
+</li>
+<li>Bin is immediately blocked in system</li>
+</ol>
+<h3 id="recording-stock-found-in-empty-bins">Recording Stock Found in &quot;Empty&quot; Bins</h3>
+<p>If you find stock in a bin that was flagged as empty:</p>
+<ol>
+<li>Scan the bin</li>
+<li>Instead of selecting &quot;Empty&quot;, proceed with normal stock take:
+<ul>
+<li>Scan item barcode(s)</li>
+<li>Enter quantity</li>
+<li>Confirm</li>
+</ul>
+</li>
+<li>Entries are created in Physical Inventory Journal under batch name &quot;EMPTY&quot;</li>
+<li>These can be processed separately to update stock levels</li>
+<li>The bin will be removed from empty bin list after posting</li>
+</ol>
+<h3 id="sync-and-connectivity">Sync and Connectivity</h3>
+<ul>
+<li>Changes made on handheld devices sync in real-time</li>
+<li>If offline, changes queue and sync when connection restored</li>
+<li>Check device sync indicator to confirm updates are posted</li>
+<li>Refresh list periodically to see updates from other users</li>
+</ul>
+<hr>
+<h2 id="reporting-and-monitoring">Reporting and Monitoring</h2>
+<h3 id="empty-bin-check-ledger">Empty Bin Check Ledger</h3>
+<p><strong>Purpose</strong>: Complete audit trail of all empty bin confirmations and checks.</p>
+<p><strong>Access</strong>:</p>
+<ul>
+<li>Navigate to <strong>Empty Bin Check Ledger</strong></li>
+<li>Or from journal, click <strong>View Ledger</strong></li>
+</ul>
+<p><strong>Key Information</strong>:</p>
+<ul>
+<li>Ledger Entry No.</li>
+<li>Original Journal Entry No.</li>
+<li>Location and Bin codes</li>
+<li>Action taken (Confirmed Empty / Check Required)</li>
+<li>User who performed action</li>
+<li>Created and Posted timestamps</li>
+<li>Bin blocking status</li>
+<li>Comments and reason codes</li>
+</ul>
+<p><strong>Filtering Options</strong>:</p>
+<ul>
+<li>Filter by date range</li>
+<li>Filter by location or specific bins</li>
+<li>Filter by user</li>
+<li>Filter by action type</li>
+<li>Filter for currently blocked bins only</li>
+</ul>
+<h3 id="empty-bin-check-statistics">Empty Bin Check Statistics</h3>
+<p><strong>Purpose</strong>: Dashboard view of empty bin check activity and trends.</p>
+<p><strong>Access</strong>: Navigate to <strong>Empty Bin Check Stats</strong> page</p>
+<p><strong>Metrics Displayed</strong>:</p>
+<ul>
+<li>Total bins checked (by period)</li>
+<li>Confirmed empty vs. checks required ratio</li>
+<li>Current blocked bins count</li>
+<li>Checks by location</li>
+<li>Checks by user</li>
+<li>Trend analysis over time</li>
+</ul>
+<h3 id="empty-bin-check-report">Empty Bin Check Report</h3>
+<p><strong>Purpose</strong>: Printable report for management review and audits.</p>
+<p><strong>Access</strong>:</p>
+<ul>
+<li>Run <strong>Empty Bin Check Report</strong> (Report 50057)</li>
+<li>Available in Excel and PDF formats</li>
+</ul>
+<p><strong>Report Sections</strong>:</p>
+<ol>
+<li><strong>Summary</strong>: Overview statistics for selected period</li>
+<li><strong>Confirmed Empty Bins</strong>: List of all confirmations</li>
+<li><strong>Bins Requiring Check</strong>: Current exceptions</li>
+<li><strong>Blocked Bins</strong>: Currently blocked bins and resolution status</li>
+<li><strong>User Activity</strong>: Breakdown by user</li>
+</ol>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li>Date Range: Filter by created or posted date</li>
+<li>Location Filter: Specific location(s)</li>
+<li>User Filter: Specific user(s)</li>
+<li>Include Posted Only: Exclude pending entries</li>
+<li>Include Resolved Blocks: Show resolved issues</li>
+</ul>
+<h3 id="viewing-from-bin-pages">Viewing from Bin Pages</h3>
+<p>From any bin list or card:</p>
+<ol>
+<li><strong>Last Empty Check Date</strong>: Shows when bin was last confirmed empty</li>
+<li><strong>Last Confirmed By</strong>: User who performed last check</li>
+<li><strong>Empty Check Required</strong>: Flag indicating bin needs investigation</li>
+<li><strong>Blocked for Empty Check</strong>: Current blocking status</li>
+<li><strong>Empty Check Comments</strong>: Latest comments</li>
+</ol>
+<p><strong>Actions Available</strong>:</p>
+<ul>
+<li>View Empty Check History (opens ledger filtered for this bin)</li>
+<li>Perform Empty Check (opens journal with this bin)</li>
+<li>Clear Check Requirement (unblock bin after resolution)</li>
+</ul>
+<hr>
+<h2 id="bin-blocking-and-investigation">Bin Blocking and Investigation</h2>
+<h3 id="when-bins-get-blocked">When Bins Get Blocked</h3>
+<p>Bins are automatically blocked when:</p>
+<ul>
+<li>Action set to &quot;Check Required&quot; in journal</li>
+<li>Check Required selected on handheld device</li>
+<li>Auto-Block on Check Required is enabled in setup</li>
+</ul>
+<h3 id="effects-of-bin-blocking">Effects of Bin Blocking</h3>
+<p>A blocked bin:</p>
+<ul>
+<li>Cannot be used for new put-aways</li>
+<li>Cannot be used as source for picks</li>
+<li>Shows as blocked in all bin lists</li>
+<li>Displays warning on handheld devices</li>
+<li>Requires resolution before use</li>
+</ul>
+<h3 id="investigating-blocked-bins">Investigating Blocked Bins</h3>
+<h4 id="step-1-review-the-ledger-entry">Step 1: Review the Ledger Entry</h4>
+<ol>
+<li>Navigate to <strong>Empty Bin Check Ledger</strong></li>
+<li>Filter for <strong>Blocked = Yes</strong></li>
+<li>Review comments and reason code</li>
+<li>Note who blocked it and when</li>
+</ol>
+<h4 id="step-2-physical-investigation">Step 2: Physical Investigation</h4>
+<ol>
+<li>Go to the physical bin location</li>
+<li>Verify if stock is present or bin is truly empty</li>
+<li>If stock found:
+<ul>
+<li>Perform stock count using standard process</li>
+<li>Record in Physical Inventory Journal</li>
+<li>Post to correct system records</li>
+</ul>
+</li>
+</ol>
+<h4 id="step-3-resolve-the-blocking">Step 3: Resolve the Blocking</h4>
+<p><strong>If Bin is Empty (False Alarm)</strong>:</p>
+<ol>
+<li>Navigate to the bin card</li>
+<li>Click <strong>Clear Check Requirement</strong> action</li>
+<li>Add comment explaining resolution</li>
+<li>Bin is unblocked and available for use</li>
+<li>New ledger entry recorded</li>
+</ol>
+<p><strong>If Stock Was Found</strong>:</p>
+<ol>
+<li>Complete stock count and post adjustments</li>
+<li>Navigate to bin card</li>
+<li>Click <strong>Clear Check Requirement</strong></li>
+<li>Add comment: &quot;Stock counted and corrected&quot;</li>
+<li>Bin is unblocked</li>
+</ol>
+<h3 id="monitoring-blocked-bins">Monitoring Blocked Bins</h3>
+<p><strong>Daily Review</strong>:</p>
+<ul>
+<li>Check <strong>Blocked Bins Count</strong> on statistics page</li>
+<li>Review aging of blocked bins</li>
+<li>Follow up on bins blocked &gt;48 hours</li>
+</ul>
+<p><strong>Weekly Review</strong>:</p>
+<ul>
+<li>Generate <strong>Empty Bin Check Report</strong></li>
+<li>Filter for blocked bins</li>
+<li>Review resolution rates and trends</li>
+<li>Identify process improvement opportunities</li>
+</ul>
+<hr>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="planning-empty-bin-checks">Planning Empty Bin Checks</h3>
+<p>✅ <strong>Do</strong>:</p>
+<ul>
+<li>Schedule regular empty bin checks (e.g., weekly or monthly)</li>
+<li>Focus on high-traffic zones first (picking areas)</li>
+<li>Coordinate with warehouse quiet periods</li>
+<li>Assign specific users or teams to zones</li>
+</ul>
+<p>❌ <strong>Don't</strong>:</p>
+<ul>
+<li>Perform during peak warehouse hours</li>
+<li>Mix with regular stock counts (separate processes)</li>
+<li>Check bins recently used in movements</li>
+</ul>
+<h3 id="using-the-journal-effectively">Using the Journal Effectively</h3>
+<p>✅ <strong>Do</strong>:</p>
+<ul>
+<li>Generate focused lists using location/zone filters</li>
+<li>Include &quot;Include Non-Empty Bins&quot; periodically to catch system errors</li>
+<li>Add meaningful comments for future reference</li>
+<li>Post regularly (at least daily) to keep journal manageable</li>
+<li>Clear posted lines to keep journal view clean</li>
+</ul>
+<p>❌ <strong>Don't</strong>:</p>
+<ul>
+<li>Generate entire warehouse at once (too many lines)</li>
+<li>Leave journal entries unposted for extended periods</li>
+<li>Skip comments when flagging bins for check</li>
+<li>Delete unposted lines without investigation</li>
+</ul>
+<h3 id="handheld-device-best-practices">Handheld Device Best Practices</h3>
+<p>✅ <strong>Do</strong>:</p>
+<ul>
+<li>Train operatives on proper empty bin confirmation process</li>
+<li>Perform physical verification before confirming</li>
+<li>Use standard comments/reason codes for consistency</li>
+<li>Sync device regularly in areas with poor connectivity</li>
+<li>Report device issues immediately</li>
+</ul>
+<p>❌ <strong>Don't</strong>:</p>
+<ul>
+<li>Confirm bins as empty without physical verification</li>
+<li>Skip comments when flagging exceptions</li>
+<li>Continue working if device doesn't sync properly</li>
+<li>Use device in airplane mode during checks</li>
+</ul>
+<h3 id="investigation-and-resolution">Investigation and Resolution</h3>
+<p>✅ <strong>Do</strong>:</p>
+<ul>
+<li>Investigate flagged bins within 24 hours</li>
+<li>Document findings in comments</li>
+<li>Correct stock levels if discrepancies found</li>
+<li>Unblock bins promptly after resolution</li>
+<li>Track patterns in check requirements</li>
+</ul>
+<p>❌ <strong>Don't</strong>:</p>
+<ul>
+<li>Assume checkflags are errors without investigation</li>
+<li>Unblock bins without verifying status</li>
+<li>Skip root cause analysis for repeated issues</li>
+<li>Leave bins blocked unnecessarily</li>
+</ul>
+<h3 id="data-quality">Data Quality</h3>
+<p>✅ <strong>Do</strong>:</p>
+<ul>
+<li>Review ledger entries weekly for patterns</li>
+<li>Monitor user activity for training needs</li>
+<li>Use consistent reason codes</li>
+<li>Maintain quality comments</li>
+<li>Archive old ledger data per retention policy</li>
+</ul>
+<p>❌ <strong>Don't</strong>:</p>
+<ul>
+<li>Use generic reason codes for all situations</li>
+<li>Skip audits of empty bin check process</li>
+<li>Ignore trends in check requirements</li>
+</ul>
+<hr>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-issues-and-solutions">Common Issues and Solutions</h3>
+<h4 id="issue-get-empty-bins-returns-no-results">Issue: &quot;Get Empty Bins&quot; Returns No Results</h4>
+<p><strong>Possible Causes</strong>:</p>
+<ul>
+<li>All bins have stock</li>
+<li>Location/zone filter too restrictive</li>
+<li>Location is in excluded list</li>
+</ul>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>Check Inventory Setup → Excluded Locations filter</li>
+<li>Verify location has bins defined</li>
+<li>Temporarily enable &quot;Include Non-Empty Bins&quot; to see all bins</li>
+<li>Check bin content in Bin Contents page</li>
+</ol>
+<h4 id="issue-cannot-post-journal-entries">Issue: Cannot Post Journal Entries</h4>
+<p><strong>Possible Causes</strong>:</p>
+<ul>
+<li>Action not set on lines</li>
+<li>Comments required but missing</li>
+<li>Reason code required but missing</li>
+<li>Record locked by another user</li>
+</ul>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>Ensure all lines have Action selected</li>
+<li>Add comments if enforced in setup</li>
+<li>Add reason codes for &quot;Check Required&quot; lines</li>
+<li>Check if another user has journal open</li>
+<li>Refresh page and retry</li>
+</ol>
+<h4 id="issue-bin-not-blocked-after-check-required">Issue: Bin Not Blocked After &quot;Check Required&quot;</h4>
+<p><strong>Possible Causes</strong>:</p>
+<ul>
+<li>Auto-block disabled in setup</li>
+<li>Journal not posted yet</li>
+<li>Bin already blocked for other reason</li>
+</ul>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>Check Inventory Setup → Auto-Block on Check Required</li>
+<li>Post the journal entry</li>
+<li>Manually block bin from bin card if auto-block disabled</li>
+<li>Check bin card for existing blocking reason</li>
+</ol>
+<h4 id="issue-handheld-device-not-showing-empty-bins">Issue: Handheld Device Not Showing Empty Bins</h4>
+<p><strong>Possible Causes</strong>:</p>
+<ul>
+<li>Device not synced</li>
+<li>User doesn't have permissions</li>
+<li>Location filter on device</li>
+<li>No empty bins in location</li>
+</ul>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>Force sync on device (refresh/reconnect)</li>
+<li>Check user permissions for empty bin check</li>
+<li>Verify device location filter settings</li>
+<li>Generate empty bin list from BC to confirm bins exist</li>
+</ol>
+<h4 id="issue-cannot-unblock-bin">Issue: Cannot Unblock Bin</h4>
+<p><strong>Possible Causes</strong>:</p>
+<ul>
+<li>Missing permissions</li>
+<li>Bin blocked for multiple reasons</li>
+<li>Integration with WMS+ preventing unblock</li>
+</ul>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>Verify user has warehouse admin permissions</li>
+<li>Check bin card for all blocking reasons</li>
+<li>Clear each blocking reason separately</li>
+<li>Contact system administrator if issue persists</li>
+</ol>
+<h4 id="issue-empty-bin-not-removed-from-list-after-stock-found">Issue: Empty Bin Not Removed from List After Stock Found</h4>
+<p><strong>Possible Causes</strong>:</p>
+<ul>
+<li>Physical Inventory Journal not posted</li>
+<li>Bin Contents not updated</li>
+<li>Cache/refresh needed</li>
+</ul>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>Post the Physical Inventory Journal entries</li>
+<li>Manually verify Bin Contents page</li>
+<li>Refresh empty bin check list</li>
+<li>Regenerate empty bin list with current filters</li>
+</ol>
+<hr>
+<h2 id="support-and-additional-resources">Support and Additional Resources</h2>
+<h3 id="getting-help">Getting Help</h3>
+<ul>
+<li><strong>Live Support</strong>: <a href="https://www.tecman.co.uk/live-support">https://www.tecman.co.uk/live-support</a></li>
+<li><strong>Documentation</strong>: Refer to resource documents in app folder</li>
+<li><strong>Privacy Policy</strong>: <a href="https://www.tecman.co.uk/legal-notices/your-privacy">https://www.tecman.co.uk/legal-notices/your-privacy</a></li>
+<li><strong>EULA</strong>: <a href="https://www.tecman.co.uk/eula">https://www.tecman.co.uk/eula</a></li>
+</ul>
+<h3 id="related-documentation">Related Documentation</h3>
+<ul>
+<li>Empty Bin Check Process Flow</li>
+<li>WMS Device User Guide</li>
+<li>Business Central Warehouse Management Guide</li>
+<li>Physical Inventory Counting Procedures</li>
+</ul>
+<h3 id="training-resources">Training Resources</h3>
+<p>Contact your system administrator or Technology Management for:</p>
+<ul>
+<li>User training sessions</li>
+<li>Advanced warehouse management training</li>
+<li>Handheld device operation training</li>
+<li>Report generation and analysis training</li>
+</ul>
+<hr>
+<h2 id="appendix">Appendix</h2>
+<h3 id="glossary">Glossary</h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Empty Bin Check</strong></td>
+<td>Process of verifying and confirming that a bin contains no stock</td>
+</tr>
+<tr>
+<td><strong>Journal</strong></td>
+<td>Temporary workspace for recording empty bin confirmations before posting</td>
+</tr>
+<tr>
+<td><strong>Ledger</strong></td>
+<td>Permanent historical record of all posted empty bin checks</td>
+</tr>
+<tr>
+<td><strong>Check Required</strong></td>
+<td>Status indicating a bin needs investigation (usually due to discrepancy)</td>
+</tr>
+<tr>
+<td><strong>Bin Blocking</strong></td>
+<td>Preventing warehouse operations on a specific bin</td>
+</tr>
+<tr>
+<td><strong>Spot Check</strong></td>
+<td>Random or scheduled verification of bin contents</td>
+</tr>
+<tr>
+<td><strong>WMS</strong></td>
+<td>Warehouse Management System</td>
+</tr>
+<tr>
+<td><strong>Physical Inventory Journal</strong></td>
+<td>BC standard journal for recording stock counts</td>
+</tr>
+</tbody>
+</table>
+<h3 id="keyboard-shortcuts">Keyboard Shortcuts</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Shortcut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New Line</td>
+<td>Ctrl + N</td>
+</tr>
+<tr>
+<td>Delete Line</td>
+<td>Ctrl + Delete</td>
+</tr>
+<tr>
+<td>Post</td>
+<td>Ctrl + F11</td>
+</tr>
+<tr>
+<td>Search/Filter</td>
+<td>Shift + F3</td>
+</tr>
+<tr>
+<td>Refresh</td>
+<td>F5</td>
+</tr>
+<tr>
+<td>View Ledger</td>
+<td>Ctrl + Shift + L</td>
+</tr>
+</tbody>
+</table>
+<h3 id="quick-reference-common-tasks">Quick Reference: Common Tasks</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Quick Steps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Confirm empty bins</strong></td>
+<td>Get Empty Bins → Select Action &quot;Confirm Empty&quot; → Post</td>
+</tr>
+<tr>
+<td><strong>Flag for investigation</strong></td>
+<td>Select line → Action &quot;Check Required&quot; → Add reason &amp; comment → Post</td>
+</tr>
+<tr>
+<td><strong>View history</strong></td>
+<td>View Ledger → Filter by bin/location/date</td>
+</tr>
+<tr>
+<td><strong>Unblock bin</strong></td>
+<td>Find in Bin List → Clear Check Requirement → Confirm</td>
+</tr>
+<tr>
+<td><strong>Generate report</strong></td>
+<td>Run Report 50057 → Set filters → Export</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Document Version</strong>: 1.0<br>
+<strong>Application Version</strong>: 27.3.0.0<br>
+<strong>Last Updated</strong>: February 2026<br>
+<strong>Publisher</strong>: Technology Management</p>
+<hr>
+<p><em>This user guide is subject to updates as the application evolves. Always refer to the latest version available in your Business Central environment or from your system administrator.</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/timeastman/rr_documentation/blob/styling/docs/product-care/zero-count-tracking.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
