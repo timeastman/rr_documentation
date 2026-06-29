@@ -28,7 +28,8 @@
       {
         "files": [
           "images/**",
-          "styles/**"
+          "styles/**",
+          "logo.png"
         ]
       }
     ],
@@ -41,7 +42,8 @@
       "_appName": "Reboot Revolution Documentation",
       "_appTitle": "Reboot Revolution Documentation",
       "_enableSearch": true,
-      "pdf": true
+      "pdf": true,
+      "appLogoPath": "logo.png"
     }
   }
 }

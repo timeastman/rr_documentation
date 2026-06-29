@@ -45,6 +45,10 @@ a:hover {
   color: #f28c00 !important;
 }
 
+.navbar-brand img {
+  max-height: 40px;
+}
+
 /* Sidebar (TOC) */
 .toc {
   border-left: 3px solid #0b2c5f;
