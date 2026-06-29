@@ -1,5 +1,7 @@
 - name: Overview
   href: index.md
+- name: PCG Pallet Shipping – Comprehensive User Guide
+  href: pcg-pallet-shipping-user-guide.md
 - name: Zero Count Tracking
   href: zero-count-tracking.md
 - name: Pallet Post Subscriber
