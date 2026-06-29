@@ -36,14 +36,14 @@
     "output": "_site",
     "template": [
       "default",
-      "modern"
+      "modern",
+      "templates/custom"
     ],
     "globalMetadata": {
       "_appName": "Reboot Revolution Documentation",
       "_appTitle": "Reboot Revolution Documentation",
       "_enableSearch": true,
-      "pdf": true,
-      "appLogoPath": "logo.png"
+      "pdf": true
     }
   }
 }
