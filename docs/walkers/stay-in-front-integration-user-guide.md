@@ -11,13 +11,13 @@ The Stay In Front (SIF) Integration connects Business Central with the Stay In F
 
 **Business problems solved:**
 
-- Field sales representatives working in SIF need up-to-date customer records and outstanding balance information from Business Central.
+- Field sales representatives working in SIF need up-to-date customer records from Business Central.
 - Orders and payments captured in SIF need to flow back into Business Central for invoicing and cash management.
 - New customers created in SIF must appear in Business Central with correct configuration templates applied.
 
 The extension handles:
 
-- **Exporting** customer master data, customer ledger entries, and payment application details from Business Central to SIF.
+- **Exporting** customer master data and payment application details from Business Central to SIF.
 - **Importing** new/updated customers, sales transactions (orders/credit memos), and payment receipts from SIF into Business Central.
 - **Error handling** with detailed error log files attached to notification emails when import records cannot be processed.
 
@@ -54,7 +54,6 @@ The extension handles:
 The SIF interfaces must be registered within the X-Integration Framework. Ensure the following interfaces are set up against the appropriate connector and entity:
 
 - **Export Customers** — exports customer master data changes.
-- **Export Customer Ledger Entries** — exports invoice/credit memo ledger entries.
 - **Export Customer Payment Ledger Entries** — exports payment application details.
 - **Import Customer** — imports new and updated customer records.
 - **Import SIF Payments** — imports payment receipt files into cash receipt journals.
@@ -70,15 +69,6 @@ Refer to the X-Integration Framework documentation for detailed connector and en
 ---
 
 ## How to Use
-
-### To export customer balances manually
-
-1. Search for **SIF Integration Setup**.
-2. Select the **Export Customer Balance** action in the action bar.
-3. Apply filters as needed (customer number, delivery type, or direct customer flag).
-4. Choose **OK** to generate the export file.
-
-The export produces a pipe-delimited file containing open ledger entry details for each selected customer, including document type, account number, payment reference, dates, amounts, and invoice identifiers.
 
 ### To import customers from SIF
 
@@ -130,6 +120,11 @@ flowchart TD
     F --> G
     G -->|No| H[Import complete]
     G -->|Yes| I[Generate error log and send email notification]
+
+    subgraph Legend
+        direction LR
+        L1[Action / Step] ~~~ L2{Decision}
+    end
 ```
 
 ### Sales Transaction Import
@@ -144,6 +139,11 @@ flowchart TD
     F --> E
     E --> G[Transactions posted in BC]
     F --> H[Send error notification email]
+
+    subgraph Legend
+        direction LR
+        L1[Action / Step] ~~~ L2{Decision}
+    end
 ```
 
 ### Payment Import Flow
@@ -161,6 +161,8 @@ sequenceDiagram
     FW-->>User: Notification (if errors)
     User->>BC: Review cash receipt journal
     User->>BC: Post journal
+
+    Note over SIF,User: Legend: Solid arrow (->>) = request / action, Dashed arrow (-->>) = response / notification
 ```
 
 ### Customer Export Flow
@@ -176,6 +178,8 @@ sequenceDiagram
     BC->>FW: Outbound change queued
     FW->>FW: Collect pending changes
     FW->>SIF: Export customer file
+
+    Note over User,SIF: Legend: Solid arrow (->>) = request / action
 ```
 
 ---
@@ -208,12 +212,6 @@ sequenceDiagram
 | Distribution Centre | The distribution centre code serving this customer. |
 | Price List | The price list code assigned to this customer in SIF. |
 | Sync. with SIF | Indicates whether this customer's changes are synchronised to SIF. |
-
-### Customer Ledger Entry (extended field)
-
-| Field | Description |
-|-------|-------------|
-| Sync. with SIF | Indicates whether this ledger entry has been exported to SIF. |
 
 ### Detailed Customer Ledger Entry (extended fields)
 
